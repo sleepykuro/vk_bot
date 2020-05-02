@@ -1,5 +1,4 @@
 from first_layer import *
-# longpoll, vk_session = bot_start("3d8a09922a0c25bd4a2235165d4eef42fe1f9d52ab09de8760edf915327cbc33bc79b2ab81c8aa139dfea")
 database_connection()
 while bot_on() != 'off':
 

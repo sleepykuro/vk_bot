@@ -9,7 +9,7 @@ import sqlite3
 import re
 
 
-vk_session = vk_api.VkApi(token="3d8a09922a0c25bd4a2235165d4eef42fe1f9d52ab09de8760edf915327cbc33bc79b2ab81c8aa139dfea")
+vk_session = vk_api.VkApi(token="")
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
  
