@@ -8,8 +8,9 @@ import random
 import sqlite3
 import re
 
-
-vk_session = vk_api.VkApi(token="")
+tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
+tokenn = tokenn.read()
+vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
  
