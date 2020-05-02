@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DatabaseNET>
+  <License LicenseCode3="" />
+  <Settings ResultsFont="Segoe UI" ResultsFontSize="9" DefaultFont="Segoe UI" DefaultFontSize="9" fishDatabase3="" Language="russian.xml" CheckDate3="20" ExecCount3="0" LastAccessed3="20" Maximize="False" Left="210" Top="41" Width="1500" Height="950" TabsMode="False" pnlControlLeftWidth="350" ToolStrip1Left="3" ToolStrip1Top="0" ToolStrip2Left="428" ToolStrip2Top="0" ToolStrip3Left="1074" ToolStrip3Top="0" ToolStrip4Left="1264" ToolStrip4Top="0">
+    <Additional2FB DatabaseEngine="Default">
+    </Additional2FB>
+    <Additional2OLEDB>
+    </Additional2OLEDB>
+    <Additional2SQLCE>
+    </Additional2SQLCE>
+    <Additional2SQLITE>
+    </Additional2SQLITE>
+    <Additional2VISTADB>
+    </Additional2VISTADB>
+  </Settings>
+  <mruf value="C:\Users\egor\Desktop\Python\botdatabase.db" r2="botdatabase.db" />
+</DatabaseNET>
