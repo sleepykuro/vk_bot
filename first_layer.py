@@ -309,4 +309,8 @@ def attendance_world_check(event, user_id, response):
 
 
 
+def regestration_for_teacher(event, user_id, response):
+  pass
+
+
   
