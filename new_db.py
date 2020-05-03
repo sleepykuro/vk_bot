@@ -57,6 +57,18 @@ def update_attendance_world(user_id=0, attendance_world = ""):
     connect.commit()
     connect.close()
 
+def update_group(user_id=0,  user_group= ""):
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET user_group = '{user_group}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
 def update_attendance(user_id=0, attendance = ""):
     connect = sqlite3.connect('botdatabase.db')
     cursor = connect.cursor()

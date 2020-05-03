@@ -310,7 +310,21 @@ def attendance_world_check(event, user_id, response):
 
 
 def regestration_for_teacher(event, user_id, response):
-  pass
+  if response == "преподаватель":
+    if user_id != check_db(user_id):
+      check_db(user_id)
+      database(user_id, user_group="", step=100, rang = 1)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите ваш предмет", 'random_id':0})
+    else: vk_session.method('messages.send', {'peer_id': user_id, 'message':"вы уже зарегестрированны", 'random_id':0})
+
+def regestration_for_teacher_step_two(event, user_id, response):
+  if "real" == subject_check(response):
+    if step_check(user_id) == 100:
+      nullify_step(user_id, step = 0)
+      update_group(user_id, response)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Буду рад в дальнейшем сотрудничать", 'random_id':0})
+
+
 
 
   
