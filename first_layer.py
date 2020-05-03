@@ -37,6 +37,7 @@ def take_user_response(event):
             regular = regular = re.compile("[^a-zA-Zа-яА-я,\d]")
             response = regular.sub('' , response)
             return response
+
 def take_user_response_not_general_reg(event):
   if event.type == VkEventType.MESSAGE_NEW:
             response = event.text
@@ -45,6 +46,7 @@ def take_user_response_not_general_reg(event):
             regular = re.compile("сообщение группе:")
             response = regular.sub('' , response)
             return response
+
 def user_message(event,user_id, response):
   if event.type == VkEventType.MESSAGE_NEW:
     print('Сообщение от ' + str(user_id) + ' пришло в: ' + str(datetime.strftime(datetime.now(), "%H:%M:%S")))
@@ -133,6 +135,7 @@ def bulk_message(event,user_id, response, bulk):
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0})
                 break
   except: pass
+  
 def bulk_message_check(event,user_id, response):
   if response == "да": 
         if step_check(user_id) == 6:
@@ -201,6 +204,7 @@ def group_message(event,user_id, response, bulk):
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0})
   except: pass
+
 def group_message_check(event,user_id, response):
       if response == "да": 
         if step_check(user_id) == 6:
@@ -272,7 +276,6 @@ def attendance_2(event, user_id, response):
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Напишите слово для проверки", 'random_id':0})
   except: pass
 
-
 def attendance_3(event, user_id, response):
   try:
     if step_check(user_id) == 10:
@@ -296,7 +299,6 @@ def attendance_3(event, user_id, response):
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':"Введите слово!", 'random_id':0})
   except: pass
 
-
 def attendance_world_check(event, user_id, response):
   try:
     if response == attendance_check_world(user_id):
@@ -306,8 +308,6 @@ def attendance_world_check(event, user_id, response):
         if response != attendance_check_world(user_id): 
             vk_session.method('messages.send', {'peer_id': user_id, 'message':"Не верное слово:(", 'random_id':0})
   except: pass
-
-
 
 def regestration_for_teacher(event, user_id, response):
   if response == "преподаватель":
@@ -324,7 +324,37 @@ def regestration_for_teacher_step_two(event, user_id, response):
       update_group(user_id, response)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Буду рад в дальнейшем сотрудничать", 'random_id':0})
 
+#_________________________________________________________________________________________________________________________
+
+#                                            Административные функции
+#_________________________________________________________________________________________________________________________
 
 
+def rang_update(event, user_id, response):
+  try:
+    if rang_check(user_id) == 1000:
+      if response == "rangupdate":
+        update_step(user_id, step = 1000)
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Введите id пользователя", 'random_id':0})
+  except: pass
 
-  
+def rang_update_step_two(event, user_id, response):
+  try:
+    if rang_check(user_id) == 1000:
+      if step_check(user_id) == 1000:
+        if response != "rangupdate":
+          update_bulk(response) 
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':" Какой ранг ?", 'random_id':0})
+          update_step(user_id, step = 1002)
+  except: pass
+
+def rang_update_step_3(event, user_id, response, bulk):
+  try:
+    if rang_check(user_id) == 1000:
+      if step_check(user_id) == 1002:
+        if response != "":
+          update_rang(bulk_check_id(user_id), int(bulk))
+          update_bulk(user_id, "")
+          nullify_step(user_id, step = 0)
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
+  except: pass

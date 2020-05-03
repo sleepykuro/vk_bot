@@ -44,6 +44,17 @@ while bot_on() != 'off':
 
             regestration_for_teacher_step_two(event, user_id, response)
 
+#_________________________________________________________________________________________________________________________
+
+#                                            Административные функции
+#_________________________________________________________________________________________________________________________
+
+            rang_update(event, user_id, response)
+
+            rang_update_step_two(event, user_id, response)
+
+            rang_update_step_3(event, user_id, response, bulk)
+
             
             
             
