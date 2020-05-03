@@ -1,7 +1,7 @@
 from first_layer import *
 database_connection()
-while bot_on() != 'off':
-
+while bot_on() != 'off': 
+    # попа жопа
     for event in longpoll.listen():      
         user_id = take_event_user_id(event)
         bulk = take_user_response_not_general_reg(event)
@@ -40,5 +40,10 @@ while bot_on() != 'off':
             attendance_3(event, user_id, response)
 
             attendance_world_check(event, user_id, response)
+
+            
+            
+            
+
 
             
