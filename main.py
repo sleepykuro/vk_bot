@@ -1,7 +1,6 @@
 from first_layer import *
 database_connection()
 while bot_on() != 'off': 
-    # попа жопа
     for event in longpoll.listen():      
         user_id = take_event_user_id(event)
         bulk = take_user_response_not_general_reg(event)
