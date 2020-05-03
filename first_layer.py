@@ -305,7 +305,11 @@ def attendance_world_check(event, user_id, response):
         if step_check(user_id) == 12:
             update_attendance(user_id, attendance = str(datetime.strftime(datetime.now(), "%H:%M")))
             vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично вы отметелись !", 'random_id':0})
-        if response != attendance_check_world(user_id): 
+            update_step(user_id, step = 0)
+            update_attendance_world(user_id, attendance_world = "")
+        if response != attendance_check_world(user_id):
+            update_step(user_id, step = 0)
+            update_attendance_world(user_id, attendance_world = "прогул")
             vk_session.method('messages.send', {'peer_id': user_id, 'message':"Не верное слово:(", 'random_id':0})
   except: pass
 
@@ -348,7 +352,7 @@ def rang_update_step_two(event, user_id, response):
           update_step(user_id, step = 1002)
   except: pass
 
-def rang_update_step_3(event, user_id, response, bulk):
+def rang_update_step_3(event, user_id, response, bulk): # НЕ РАБОТАЕТ
   try:
     if rang_check(user_id) == 1000:
       if step_check(user_id) == 1002:
