@@ -3,8 +3,8 @@ database_connection()
 while bot_on() != 'off': 
     for event in longpoll.listen():      
         user_id = take_event_user_id(event)
-        bulk = take_user_response_not_general_reg(event)
         response = take_user_response(event)
+        bulk = take_user_response_not_general_reg(event, response)
         user_message(event,user_id, response)
         if event.from_user and not (event.from_me):
             

@@ -38,15 +38,22 @@ def take_user_response(event):
             response = regular.sub('' , response)
             return response
 
-def take_user_response_not_general_reg(event):
+def take_user_response_not_general_reg(event, response):
   if event.type == VkEventType.MESSAGE_NEW:
+            tester = response
             response = event.text
-            regular = re.compile("сообщение колледжу:")
-            response = regular.sub('' , response)
-            regular = re.compile("сообщение группе:")
-            response = regular.sub('' , response)
-            return response
-
+            response = response.lower()
+            if "сообщениеколледжу" in tester:
+              regular = re.compile("сообщение колледжу:")
+              response = regular.sub('' , response)
+              return response
+            if "сообщениегруппе" in tester:
+                regular = re.compile("сообщение группе:")
+                response = regular.sub('' , response)
+                return response
+            else:
+              return response
+                                  
 def user_message(event,user_id, response):
   if event.type == VkEventType.MESSAGE_NEW:
     print('Сообщение от ' + str(user_id) + ' пришло в: ' + str(datetime.strftime(datetime.now(), "%H:%M:%S")))
@@ -298,6 +305,9 @@ def attendance_3(event, user_id, response):
                   update_step(id_id, step=12)
                   update_attendance_world(id_id, response)
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':"Введите слово!", 'random_id':0})
+        nullify_step(user_id, step = 0)
+        update_attendance_world(user_id, "")
+        update_attendance(user_id, "")
   except: pass
 
 def attendance_world_check(event, user_id, response):
@@ -308,10 +318,11 @@ def attendance_world_check(event, user_id, response):
             vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично вы отметелись !", 'random_id':0})
             update_step(user_id, step = 0)
             update_attendance_world(user_id, attendance_world = "")
-        if response != attendance_check_world(user_id):
-            update_step(user_id, step = 0)
-            update_attendance_world(user_id, attendance_world = "прогул")
-            vk_session.method('messages.send', {'peer_id': user_id, 'message':"Не верное слово:(", 'random_id':0})
+    elif response != attendance_check_world(user_id):
+      if step_check(user_id) == 12:
+        update_step(user_id, step = 0)
+        update_attendance_world(user_id, attendance_world = "прогул")
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Не верное слово:(", 'random_id':0})
   except: pass
 
 def regestration_for_teacher(event, user_id, response):
