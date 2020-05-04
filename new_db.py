@@ -1,13 +1,13 @@
 import sqlite3
 
-def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attendance = "", attendance_world = ""):
+def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attendance = "", attendance_world = "", recruitment_group = "", recruitment = ""):
     
-    data = [user_id, user_group, step, rang, bulk, attendance, attendance_world]
+    data = [user_id, user_group, step, rang, bulk, attendance, attendance_world, recruitment_group, recruitment]
     
     conn = sqlite3.connect('botdatabase.db')
     cursor = conn.cursor()
     
-    cursor.execute(" INSERT INTO Groups VALUES (?, ?, ?, ?, ?, ?, ?) ", data)
+    cursor.execute(" INSERT INTO Groups VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ", data)
 
     conn.commit()
     cursor.close()
@@ -45,6 +45,38 @@ def attendance_check(user_id=0):
     connect.close()
     return attendance
 
+def recruitment_group_check(user_id=0):
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    recruitment_groupe = cursor.execute(f"""
+    SELECT recruitment_group 
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    recruitment_group = list(recruitment_group)[0][0]
+    
+    connect.commit()
+    connect.close()
+    return recruitment_group
+
+def recruitment_check(user_id=0):
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    recruitment = cursor.execute(f"""
+    SELECT recruitment 
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    recruitment = list(recruitment)[0][0]
+    
+    connect.commit()
+    connect.close()
+    return recruitment
+
 def update_attendance_world(user_id=0, attendance_world = ""):
     connect = sqlite3.connect('botdatabase.db')
     cursor = connect.cursor()
@@ -52,6 +84,30 @@ def update_attendance_world(user_id=0, attendance_world = ""):
     cursor.execute(f""" 
     UPDATE Groups 
     SET attendance_world = '{attendance_world}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
+def update_recruitment_group(user_id=0, recruitment_group = ""):
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET recruitment_group = '{recruitment_group}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
+def update_recruitment(user_id=0, recruitment = ""):
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET recruitment = '{recruitment}'
     WHERE user_id = {user_id};
     """)
     connect.commit()

@@ -65,8 +65,9 @@ def hello(event,user_id, response):
     hi_answer = hi_answer_random('hi')
     vk_session.method('messages.send', {'user_id': user_id, 'message':hi_answer, 'random_id':0}) 
 
-def regestration_info(event,user_id, response): #Добавил вариаций вызыва функции регистрации
-  if response == registration_check(response):
+def regestration_info(event,user_id, response):
+  response = registration_check(response)
+  if response == "какзарегистрироваться":
     vk_session.method('messages.send', {'user_id': user_id, 'message':'Что бы зарегестрироваться: \n 1.Напишите номер вашей группы \n 2.Напишите ваш статус в колледже (доступен только "ученик")', 'random_id':0}) 
 
 def regestration_one(event, user_id, response):
@@ -77,8 +78,8 @@ def regestration_one(event, user_id, response):
       database(user_id, response, step, rang = '0', bulk = '')
       vk_session.method('messages.send', {'user_id': user_id, 'message':'Введите пожалуйста ваш статус в колледже', 'random_id':0})
 
-def regestration_two(event, user_id, response): #Добавил вторую вариацию выбора статуса ученика (студент)
-    if response == "ученик" or "студент":
+def regestration_two(event, user_id, response): 
+    if response == "ученик" or response =="студент":
       try:
         if rang_check(user_id) == 0:
           if step_check(user_id) == 1:
@@ -94,8 +95,8 @@ def regestration_two(event, user_id, response): #Добавил вторую в�
       except IndexError:
         vk_session.method('messages.send', {'user_id': user_id, 'message':'сначала введите вашу группу', 'random_id':0})
 
-def help_user(event,user_id, response): #Добавил вторую выриацию вызовы функции help_user
-  if response == "help" or "помощь" :   #Изменил текст(добавил обзадз, поменял пунктуацию и добавил большие буквы в начале слова)
+def help_user(event,user_id, response):
+  if response == "help" or response == "помощь" :   
     vk_session.method('messages.send', {'user_id': user_id, 'message':"""1. Привет 
     \n2. Help (Список комманд доступный вашему статусу)
     \n3. Как зарегестрироваться ? (Дает всю информацию о том как зарегестрировать себя в боте)
@@ -144,35 +145,36 @@ def bulk_message(event,user_id, response, bulk):
                 break
   except: pass
   
-def bulk_message_check(event,user_id, response): #Добавил две новые варицаии ответа для одобрения или не одобрения сообщения
-  if response == "да" or "одобряю": 
-        if step_check(user_id) == 6:
-          message_id = bulk_check_id(user_id)
-          vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
-          bulk = bulk_check(message_id)
-          conn = sqlite3.connect('botdatabase.db')
-          cursor = conn.cursor()
-          data = (" SELECT user_id FROM Groups")
-          id_user = cursor.execute(data)
-          id_user = id_user.fetchall()
-
-          for i in range(len(id_user)):
-              id_id = id_user[i]
-              id_id = id_id[0]
-              id_id = int(id_id)
-              if rang_check(id_id) < 0.100:
-                  vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
-          nullify_step(user_id, step = 0)
-          update_bulk(user_id, "")
-          update_bulk(message_id, "")
-  elif response == "нет" or "неодобряю": 
+def bulk_message_check(event,user_id, response): 
+  try:
+    if response == "да" or response == "одобряю": 
           if step_check(user_id) == 6:
-            message_id = int(bulk_check(user_id))
-            vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения отклонена", 'random_id':0})
+            message_id = bulk_check_id(user_id)
+            vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
+            bulk = bulk_check(message_id)
+            conn = sqlite3.connect('botdatabase.db')
+            cursor = conn.cursor()
+            data = (" SELECT user_id FROM Groups")
+            id_user = cursor.execute(data)
+            id_user = id_user.fetchall()
+
+            for i in range(len(id_user)):
+                id_id = id_user[i]
+                id_id = id_id[0]
+                id_id = int(id_id)
+                if rang_check(id_id) < 0.100:
+                    vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
             nullify_step(user_id, step = 0)
             update_bulk(user_id, "")
             update_bulk(message_id, "")
-
+    elif response == "нет" or "неодобряю": 
+            if step_check(user_id) == 6:
+              message_id = int(bulk_check(user_id))
+              vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения отклонена", 'random_id':0})
+              nullify_step(user_id, step = 0)
+              update_bulk(user_id, "")
+              update_bulk(message_id, "")
+  except: pass
 def group_message(event,user_id, response, bulk):
   try:
     if "сообщениегруппе" in response:
@@ -213,8 +215,9 @@ def group_message(event,user_id, response, bulk):
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0})
   except: pass
 
-def group_message_check(event,user_id, response): #Добавил две новые варицаии ответа
-      if response == "да" or "одобряю": 
+def group_message_check(event,user_id, response): 
+    try:
+      if response == "да" or response == "одобряю": 
         if step_check(user_id) == 6:
           message_id = bulk_check_id(user_id)
           # message_id = int(message_id)
@@ -243,6 +246,7 @@ def group_message_check(event,user_id, response): #Добавил две нов�
           nullify_step(user_id, step = 0)
           update_bulk(user_id, "")
           update_bulk(message_id, "")
+    except: pass
 
 def game_1(event,user_id, response):
   if response == 'игра':
@@ -340,9 +344,186 @@ def regestration_for_teacher_step_two(event, user_id, response):
       update_group(user_id, response)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Буду рад в дальнейшем сотрудничать", 'random_id':0})
 
-def recruitment_team(response):
-  if "наборвкоманду" in repsonse: pass
+def recruitment_team(event, user_id, response):
+  if response == "наборвкоманду": 
+    vk_session.method('messages.send', {'peer_id': user_id, 'message':"Где вы хотите набрать команду ? \n в колледже/в группе", 'random_id':0})
+    update_step(user_id, step = 14)
 
+def recruitment_team_2(event, user_id, response):
+  if response == "вгруппе":
+    if step_check(user_id) == 14:
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Хорошо в таком случае укажите следующие данные: \n\n 1. Номер группы\n2. Сообщение и ссылку на беседу", 'random_id':0})
+      update_step(user_id, step = 15)
+  if response == "вколледже":
+    if step_check(user_id) == 14:
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"хорошо, в таком случае напишите сообщение которое нужно отправить вместе с ссылкой на беседу", 'random_id':0})
+      update_step(user_id, step = 16)
+
+def recruitment_team_21(event, user_id, response):
+  try: 
+    if step_check(user_id) == 15:
+      if groupa(response) == "real":
+        update_recruitment_group(user_id, response)
+        update_step(user_id, step = 17)
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"теперь укажите сообщение с ссылкой на беседу", 'random_id':0})
+  except: pass
+
+def recruitment_team_31(event, user_id, response, bulk):
+  try:
+    if step_check(user_id) == 17:
+      if groupa(response) != "real":
+        if rang_check(user_id) < 0.050:
+          update_recruitment(user_id, bulk)
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Ваш запрос направлен на одобрение", 'random_id':0})
+          nullify_step(user_id, step=0)
+          group = recruitment_group_check(user_id)
+          conn = sqlite3.connect('botdatabase.db')
+          cursor = conn.cursor()
+          data = (" SELECT user_id FROM Groups")
+          id_user = cursor.execute(data)
+          id_user = id_user.fetchall()
+
+          for i in range(len(id_user)):
+              id_id = id_user[i]
+              id_id = id_id[0]
+              id_id = int(id_id)
+              if group == group_check(id_id):
+                if rang_check(id_id) >= 0.050:
+                  update_step(id_id, step=18)
+                  update_recruitment(id_id, str(user_id))
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0})
+        if rang_check(user_id) >= 0.050:
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"надеюсь в скором времени к вам подключаться люди!(или нет)", 'random_id':0})
+          group = recruitment_group_check(user_id)
+          conn = sqlite3.connect('botdatabase.db')
+          cursor = conn.cursor()
+          data = (" SELECT user_id FROM Groups")
+          id_user = cursor.execute(data)
+          id_user = id_user.fetchall()
+
+          for i in range(len(id_user)):
+              id_id = id_user[i]
+              id_id = id_id[0]
+              id_id = int(id_id)
+              if group == group_check(id_id):
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
+          nullify_step(user_id, step=0)
+          update_recruitment_group(user_id, "")
+  except: pass
+
+def recruitment_team_41_check(event, user_id, response, bulk):
+  if response == "да": 
+    if step_check(user_id) == 18:
+      if rang_check(user_id) >= 0.050:
+        message_id = recruitment_check(user_id)
+        vk_session.method('messages.send', {'peer_id': message_id, 'message':"Ваш запрос одобрен", 'random_id':0})
+        group = recruitment_group_check(message_id)
+        conn = sqlite3.connect('botdatabase.db')
+        cursor = conn.cursor()
+        data = (" SELECT user_id FROM Groups")
+        id_user = cursor.execute(data)
+        id_user = id_user.fetchall()
+
+        for i in range(len(id_user)):
+              id_id = id_user[i]
+              id_id = id_id[0]
+              id_id = int(id_id)
+              if group == group_check(id_id):
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':recruitment_check(message_id), 'random_id':0})
+        nullify_step(user_id, 0)
+        update_recruitment(user_id, "")
+        nullify_step(message_id, 0)
+        update_recruitment(message_id, "")
+        update_recruitment_group(message_id, "")
+  if response == "нет": 
+    if step_check(user_id) == 18:
+      if rang_check(user_id) >= 0.050:
+        message_id = recruitment_check(user_id)
+        vk_session.method('messages.send', {'peer_id': message_id, 'message':"Ваш запрос откланен", 'random_id':0})
+        nullify_step(user_id, 0)
+        update_recruitment(user_id, "")
+        nullify_step(message_id, 0)
+        update_recruitment(message_id, "")
+        update_recruitment_group(message_id, "")
+
+def recruitment_team_32(event, user_id, response, bulk):
+  try: 
+    if step_check(user_id) == 16:
+      if rang_check(user_id) >= 0.050:
+        if response != "вколледже":
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично, надеюсь скоро к вам кто нибудь подключиться", 'random_id':0})
+          conn = sqlite3.connect('botdatabase.db')
+          cursor = conn.cursor()
+          data = (" SELECT user_id FROM Groups")
+          id_user = cursor.execute(data)
+          id_user = id_user.fetchall()
+
+          for i in range(len(id_user)):
+              id_id = id_user[i]
+              id_id = id_id[0]
+              id_id = int(id_id)
+              if id_id != user_id:
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk,'random_id':0})
+      if rang_check(user_id) < 0.050:
+          update_recruitment(user_id, bulk)
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Ваш запрос направлен на одобрение", 'random_id':0})
+          nullify_step(user_id, step=0)
+          group = recruitment_group_check(user_id)
+          conn = sqlite3.connect('botdatabase.db')
+          cursor = conn.cursor()
+          data = (" SELECT user_id FROM Groups")
+          id_user = cursor.execute(data)
+          id_user = id_user.fetchall()
+
+          for i in range(len(id_user)):
+              id_id = id_user[i]
+              id_id = id_id[0]
+              id_id = int(id_id)
+              if group == group_check(id_id):
+                if rang_check(id_id) >= 0.050:
+                  update_step(id_id, step=19)
+                  update_recruitment(id_id, str(user_id))
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0})
+  except: pass
+
+def recruitment_team_42_check(event, user_id, response, bulk):
+  if response == "да": 
+    if step_check(user_id) == 19:
+      if rang_check(user_id) >= 0.050:
+        message_id = recruitment_check(user_id)
+        vk_session.method('messages.send', {'peer_id': message_id, 'message':"Ваш запрос одобрен", 'random_id':0})
+        conn = sqlite3.connect('botdatabase.db')
+        cursor = conn.cursor()
+        data = (" SELECT user_id FROM Groups")
+        id_user = cursor.execute(data)
+        id_user = id_user.fetchall()
+
+        for i in range(len(id_user)):
+              id_id = id_user[i]
+              id_id = id_id[0]
+              id_id = int(id_id)
+              vk_session.method('messages.send', {'peer_id': id_id, 'message':recruitment_check(message_id), 'random_id':0})
+        nullify_step(user_id, 0)
+        update_recruitment(user_id, "")
+        nullify_step(message_id, 0)
+        update_recruitment(message_id, "")
+        update_recruitment_group(message_id, "")
+  if response == "нет": 
+    if step_check(user_id) == 19:
+      if rang_check(user_id) >= 0.050:
+        message_id = recruitment_check(user_id)
+        vk_session.method('messages.send', {'peer_id': message_id, 'message':"Ваш запрос откланен", 'random_id':0})
+        nullify_step(user_id, 0)
+        update_recruitment(user_id, "")
+        nullify_step(message_id, 0)
+        update_recruitment(message_id, "")
+          
+          
+          
+          
+          
 # Спрашиваем: группе или колледжу
   # если ответ == группе: то
   # Отправляем инструкцию 
@@ -392,7 +573,7 @@ def rang_update_step_two(event, user_id, response):
           update_step(user_id, step = 1002)
   except: pass
 
-def rang_update_step_3(event, user_id, response, bulk): # НЕ РАБОТАЕТ
+def rang_update_step_3(event, user_id, response, bulk): 
         if response == "ученик":
           if rang_check(user_id) == 1000:        
             if step_check(user_id) == 1002:

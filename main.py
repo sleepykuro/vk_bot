@@ -44,6 +44,20 @@ while bot_on() != 'off':
 
             regestration_for_teacher_step_two(event, user_id, response)
 
+            recruitment_team(event, user_id, response)
+
+            recruitment_team_2(event, user_id, response)
+
+            recruitment_team_21(event, user_id, response)
+
+            recruitment_team_31(event, user_id, response, bulk)
+
+            recruitment_team_41_check(event, user_id, response, bulk)
+
+            recruitment_team_32(event, user_id, response, bulk)
+
+            recruitment_team_42_check(event, user_id, response, bulk)
+
 #_________________________________________________________________________________________________________________________
 
 #                                            Административные функции
