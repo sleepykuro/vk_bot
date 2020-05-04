@@ -65,8 +65,8 @@ def hello(event,user_id, response):
     hi_answer = hi_answer_random('hi')
     vk_session.method('messages.send', {'user_id': user_id, 'message':hi_answer, 'random_id':0}) 
 
-def regestration_info(event,user_id, response):
-  if response == 'какзарегистрироваться':
+def regestration_info(event,user_id, response): #Добавил вариаций вызыва функции регистрации
+  if response == registration_check(response):
     vk_session.method('messages.send', {'user_id': user_id, 'message':'Что бы зарегестрироваться: \n 1.Напишите номер вашей группы \n 2.Напишите ваш статус в колледже (доступен только "ученик")', 'random_id':0}) 
 
 def regestration_one(event, user_id, response):
@@ -77,8 +77,8 @@ def regestration_one(event, user_id, response):
       database(user_id, response, step, rang = '0', bulk = '')
       vk_session.method('messages.send', {'user_id': user_id, 'message':'Введите пожалуйста ваш статус в колледже', 'random_id':0})
 
-def regestration_two(event, user_id, response):
-    if response == "ученик":
+def regestration_two(event, user_id, response): #Добавил вторую вариацию выбора статуса ученика (студент)
+    if response == "ученик" or "студент":
       try:
         if rang_check(user_id) == 0:
           if step_check(user_id) == 1:
@@ -94,16 +94,16 @@ def regestration_two(event, user_id, response):
       except IndexError:
         vk_session.method('messages.send', {'user_id': user_id, 'message':'сначала введите вашу группу', 'random_id':0})
 
-def help_user(event,user_id, response):
-  if response == "help" :
+def help_user(event,user_id, response): #Добавил вторую выриацию вызовы функции help_user
+  if response == "help" or "помощь" :   #Изменил текст(добавил обзадз, поменял пунктуацию и добавил большие буквы в начале слова)
     vk_session.method('messages.send', {'user_id': user_id, 'message':"""1. Привет 
     \n2. Help (Список комманд доступный вашему статусу)
     \n3. Как зарегестрироваться ? (Дает всю информацию о том как зарегестрировать себя в боте)
-    \n4. сообщение колледжу: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всему колледжу)
-    \n5. сообщение группе: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всей группе(в разроботке))
-    сообщение колледжу: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всему колледжу)
-    \n6. Игра (простая игра) 
-    \n7. Время(показывает время до конца пары)""", 'random_id':0})
+    \n4. Сообщение колледжу: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всему колледжу)
+    \n5. Сообщение группе: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всей группе(в разроботке))
+    \n6. Сообщение колледжу: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всему колледжу)
+    \n7. Игра (простая игра) 
+    \n8. Время(показывает время до конца пары)""", 'random_id':0})
 
 def bulk_message(event,user_id, response, bulk):
   try:
@@ -144,8 +144,8 @@ def bulk_message(event,user_id, response, bulk):
                 break
   except: pass
   
-def bulk_message_check(event,user_id, response):
-  if response == "да": 
+def bulk_message_check(event,user_id, response): #Добавил две новые варицаии ответа для одобрения или не одобрения сообщения
+  if response == "да" or "одобряю": 
         if step_check(user_id) == 6:
           message_id = bulk_check_id(user_id)
           vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
@@ -165,7 +165,7 @@ def bulk_message_check(event,user_id, response):
           nullify_step(user_id, step = 0)
           update_bulk(user_id, "")
           update_bulk(message_id, "")
-  elif response == "нет": 
+  elif response == "нет" or "неодобряю": 
           if step_check(user_id) == 6:
             message_id = int(bulk_check(user_id))
             vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения отклонена", 'random_id':0})
@@ -213,8 +213,8 @@ def group_message(event,user_id, response, bulk):
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0})
   except: pass
 
-def group_message_check(event,user_id, response):
-      if response == "да": 
+def group_message_check(event,user_id, response): #Добавил две новые варицаии ответа
+      if response == "да" or "одобряю": 
         if step_check(user_id) == 6:
           message_id = bulk_check_id(user_id)
           # message_id = int(message_id)
@@ -236,7 +236,7 @@ def group_message_check(event,user_id, response):
           nullify_step(user_id, step = 0)
           update_bulk(user_id, "")
           update_bulk(message_id, "")
-      elif response == "нет": 
+      elif response == "нет" or "неодобряю": 
         if step_check(user_id) == 6:
           message_id = int(bulk_check(user_id))
           vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения отклонена", 'random_id':0})
@@ -339,6 +339,34 @@ def regestration_for_teacher_step_two(event, user_id, response):
       nullify_step(user_id, step = 0)
       update_group(user_id, response)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Буду рад в дальнейшем сотрудничать", 'random_id':0})
+
+def recruitment_team(response): #В группе
+  if "наборвкоманду" in repsonse: pass
+
+# Спрашиваем: группе или колледжу
+  # если ответ == группе: то
+  # Отправляем инструкцию 
+  # Получаем ответ (Цель и ссылка на беседу)
+  # Проверяем ранг 
+    # если ранг == ученик: то отправляем запрос Куратору
+      #  если Куратор одобряет: то рассылаем сообщение группе (Цель и ссылка на беседу)
+      #  если Куратор не одобряет: то отправляем сообщение ученику (Ваше обращение отклонено куратором)
+    # если ранг Куратор: то рассылаем сообщение группе
+  # если ответ == колледжу: то 
+  # Отправляем иструкцию
+  # Получаем ответ (Цель и ссылка на беседу)
+  # Проверяем ранг 
+    # если ранг < 1000: то отправляем запрос Администрации
+      # если Администрацию одобряет: то рассылаем сообщение колледжу (Цель и ссылка на беседу)
+      # если Администрацию не одобряет: то отправляем сообщение юзеру (Ваще обращение откланено Администрацией)
+    # если ранг <= 1000: то рассылаем сообщение колледжу
+
+# я без тебя в коде разобраться не могу сам, так как тут даже если обычные функции и все из ванильного Питона. 
+# Просто из-за малого опыта очень путаюсь, так что написал шаблон не на питоне, ну хоть что-то. я бы еще поделал, но мама зовет кушать :))
+
+
+            
+      
 
 #_________________________________________________________________________________________________________________________
 
