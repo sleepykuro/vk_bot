@@ -82,7 +82,8 @@ def regestration_two(event, user_id, response):
           elif step_check(user_id) == 0: 
             vk_session.method('messages.send', {'user_id': user_id, 'message':'сначала введите вашу группу', 'random_id':0})
         else:
-          vk_session.method('messages.send', {'user_id': user_id, 'message':'Поменять статус, можно только после одобрения Куратора', 'random_id':0})
+          if rang_check(user_id) < 1000:
+            vk_session.method('messages.send', {'user_id': user_id, 'message':'Поменять статус, можно только после одобрения Куратора', 'random_id':0})
       except IndexError:
         vk_session.method('messages.send', {'user_id': user_id, 'message':'сначала введите вашу группу', 'random_id':0})
 
@@ -347,41 +348,54 @@ def rang_update_step_two(event, user_id, response):
     if rang_check(user_id) == 1000:
       if step_check(user_id) == 1000:
         if response != "rangupdate":
-          update_bulk(response) 
+          update_bulk(user_id, response)
           vk_session.method('messages.send', {'peer_id': user_id, 'message':" Какой ранг ?", 'random_id':0})
           update_step(user_id, step = 1002)
   except: pass
 
 def rang_update_step_3(event, user_id, response, bulk): # НЕ РАБОТАЕТ
-  try:
-    if rang_check(user_id) == 1000:
-      if step_check(user_id) == 1002:
         if response == "ученик":
-          new_rang = 0.010
-          update_rang(bulk_check_id(user_id), new_rang)
-          vk_session.method('messages.send', {'peer_id': bulk_check_id(user_id), 'message':f"Ваш ранг теперь {response}", 'random_id':0})
-          update_bulk(user_id, "")
-          nullify_step(user_id, step = 0)
-          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
+          if rang_check(user_id) == 1000:        
+            if step_check(user_id) == 1002:
+              new_rang = 0.010
+              id_id = bulk_check_id(user_id)
+              print(id_id)
+              update_rang(bulk_check_id(user_id), new_rang)
+              vk_session.method('messages.send', {'peer_id': bulk_check_id(user_id), 'message':f"Ваш ранг теперь {response}", 'random_id':0})
+              update_bulk(user_id, "")
+              nullify_step(user_id, step = 0)
+              vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
         if response == "староста":
-          new_rang = 0.050
-          update_rang(bulk_check_id(user_id), new_rang)
-          vk_session.method('messages.send', {'peer_id': bulk_check_id(user_id), 'message':f"Ваш ранг теперь {response}", 'random_id':0})
-          update_bulk(user_id, "")
-          nullify_step(user_id, step = 0)
-          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
+          if rang_check(user_id) == 1000:        
+            if step_check(user_id) == 1002:
+              new_rang = 0.050
+              id_id = bulk_check_id(user_id)
+              print(id_id)
+              update_rang(bulk_check_id(user_id), new_rang)
+              vk_session.method('messages.send', {'peer_id': bulk_check_id(user_id), 'message':f"Ваш ранг теперь {response}", 'random_id':0})
+              update_bulk(user_id, "")
+              nullify_step(user_id, step = 0)
+              vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
+        if response == "учитель":
+          if rang_check(user_id) == 1000:        
+            if step_check(user_id) == 1002:
+              new_rang = 1
+              id_id = bulk_check_id(user_id)
+              print(id_id)
+              update_rang(bulk_check_id(user_id), new_rang)
+              vk_session.method('messages.send', {'peer_id': bulk_check_id(user_id), 'message':f"Ваш ранг теперь {response}", 'random_id':0})
+              update_bulk(user_id, "")
+              nullify_step(user_id, step = 0)
+              vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
         if response == "куратор":
-          new_rang = 0.070
-          update_rang(bulk_check_id(user_id), new_rang)
-          vk_session.method('messages.send', {'peer_id': bulk_check_id(user_id), 'message':f"Ваш ранг теперь {response}", 'random_id':0})
-          update_bulk(user_id, "")
-          nullify_step(user_id, step = 0)
-          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
-        if response == "препод":
-          new_rang = 1
-          update_rang(bulk_check_id(user_id), new_rang)
-          vk_session.method('messages.send', {'peer_id': bulk_check_id(user_id), 'message':f"Ваш ранг теперь {response}", 'random_id':0})
-          update_bulk(user_id, "")
-          nullify_step(user_id, step = 0)
-          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
-  except: pass
+          if rang_check(user_id) == 1000:        
+            if step_check(user_id) == 1002:
+              new_rang = 0.070
+              id_id = bulk_check_id(user_id)
+              print(id_id)
+              update_rang(bulk_check_id(user_id), new_rang)
+              vk_session.method('messages.send', {'peer_id': bulk_check_id(user_id), 'message':f"Ваш ранг теперь {response}", 'random_id':0})
+              update_bulk(user_id, "")
+              nullify_step(user_id, step = 0)
+              vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
+        
