@@ -394,14 +394,13 @@ def recruitment_team_31(event, user_id, response, bulk):
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0})
         if rang_check(user_id) >= 0.050:
-          vk_session.method('messages.send', {'peer_id': user_id, 'message':"надеюсь в скором времени к вам подключаться люди!(или нет)", 'random_id':0})
           group = recruitment_group_check(user_id)
           conn = sqlite3.connect('botdatabase.db')
           cursor = conn.cursor()
           data = (" SELECT user_id FROM Groups")
           id_user = cursor.execute(data)
           id_user = id_user.fetchall()
-
+          print("1")
           for i in range(len(id_user)):
               id_id = id_user[i]
               id_id = id_id[0]
@@ -410,6 +409,7 @@ def recruitment_team_31(event, user_id, response, bulk):
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
           nullify_step(user_id, step=0)
           update_recruitment_group(user_id, "")
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"надеюсь в скором времени к вам подключаться люди!(или нет)", 'random_id':0})
   except: pass
 
 def recruitment_team_41_check(event, user_id, response, bulk):

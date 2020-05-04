@@ -49,7 +49,7 @@ def recruitment_group_check(user_id=0):
     connect = sqlite3.connect('botdatabase.db')
     cursor = connect.cursor()
 
-    recruitment_groupe = cursor.execute(f"""
+    recruitment_group = cursor.execute(f"""
     SELECT recruitment_group 
     FROM Groups
     WHERE user_id = {user_id}
