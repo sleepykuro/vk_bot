@@ -340,7 +340,7 @@ def regestration_for_teacher_step_two(event, user_id, response):
       update_group(user_id, response)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Буду рад в дальнейшем сотрудничать", 'random_id':0})
 
-def recruitment_team(response): #В группе
+def recruitment_team(response):
   if "наборвкоманду" in repsonse: pass
 
 # Спрашиваем: группе или колледжу
