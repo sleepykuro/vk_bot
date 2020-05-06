@@ -59,14 +59,13 @@ def user_message(event,user_id, response):
     print('Сообщение от ' + str(user_id) + ' пришло в: ' + str(datetime.strftime(datetime.now(), "%H:%M:%S")))
     print('Текст сообщения: ' + str(response))
 
-def hello(event,user_id, response = hello_check(response)):
-  if response == 'привет':
+def hello(event,user_id, response):
+  if hello_check(response) == 'привет':
     hi_answer = hi_answer_random('hi')
     vk_session.method('messages.send', {'user_id': user_id, 'message':hi_answer, 'random_id':0}) 
 
 def regestration_info(event,user_id, response):
-  response = registration_check(response)
-  if response == "какзарегистрироваться":
+  if registration_check(response) == "какзарегистрироваться":
     vk_session.method('messages.send', {'user_id': user_id, 'message':'Что бы зарегестрироваться: \n 1.Напишите номер вашей группы \n 2.Напишите ваш статус в колледже (доступен только "ученик")', 'random_id':0}) 
 
 def regestration_one(event, user_id, response):
@@ -554,6 +553,7 @@ def homework_send_3(event, user_id, response, bulk):
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
         nullify_step(user_id, 0)
         update_homework(user_id, "")
+  except: pass
 #___________________________________________________________________________________________________________________
 
 #                                            Административные функции
