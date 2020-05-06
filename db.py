@@ -6,7 +6,7 @@ def create_DB():
     
 
     cursor.execute(""" CREATE TABLE Groups 
-    (user_id text, user_group text, step text, rang text, bulk_message text, attendance text, attendance_world text, recruitment_group text, recruitment text )
+    (user_id text, user_group text, step text, rang text, bulk_message text, attendance text, attendance_world text, recruitment_group text, recruitment text, homework text )
                 """)
 
 

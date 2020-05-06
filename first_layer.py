@@ -8,7 +8,7 @@ import random
 import sqlite3
 import re
 
-tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
+tokenn = open(r"C:\Users\alfas\Desktop\token.txt", "r")
 tokenn = tokenn.read()
 vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
@@ -521,7 +521,7 @@ def recruitment_team_42_check(event, user_id, response, bulk):
     
 def homework_send(event, user_id, response):
   if response == "домашняяработа":
-    if rang_check >= 1: 
+    if rang_check(user_id) >= 1: 
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какой группе вы хотите отправить дз?", 'random_id':0})
       update_step(user_id, 20)
 
@@ -549,16 +549,19 @@ def homework_send_3(event, user_id, response, bulk):
               id_id = id_user[i]
               id_id = id_id[0]
               id_id = int(id_id)
-              if grupa == group_check(user_id):
+              if grupa == group_check(id_id):
+                update_homework(id_id, bulk)
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
         nullify_step(user_id, 0)
         update_homework(user_id, "")
   except: pass
+
+
+
 #___________________________________________________________________________________________________________________
 
 #                                            Административные функции
 #_________________________________________________________________________________________________________________________
-
 
 def rang_update(event, user_id, response):
   try:

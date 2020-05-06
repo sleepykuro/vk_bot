@@ -58,6 +58,12 @@ while bot_on() != 'off':
 
             recruitment_team_42_check(event, user_id, response, bulk)
 
+            homework_send(event, user_id, response)
+
+            homework_send_2(event, user_id, response)
+
+            homework_send_3(event, user_id, response, bulk)
+
 #_________________________________________________________________________________________________________________________
 
 #                                            Административные функции

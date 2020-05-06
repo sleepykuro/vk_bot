@@ -299,3 +299,16 @@ def bulk_check(user_id=0):
     connect.commit()
     connect.close()
     return bulk_message
+
+def update_group(user_id=0,  user_group= ""):
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET user_group = '{user_group}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
