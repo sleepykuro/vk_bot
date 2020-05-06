@@ -59,8 +59,7 @@ def user_message(event,user_id, response):
     print('Сообщение от ' + str(user_id) + ' пришло в: ' + str(datetime.strftime(datetime.now(), "%H:%M:%S")))
     print('Текст сообщения: ' + str(response))
 
-def hello(event,user_id, response):
-  response = hello_check(response)
+def hello(event,user_id, response = hello_check(response)):
   if response == 'привет':
     hi_answer = hi_answer_random('hi')
     vk_session.method('messages.send', {'user_id': user_id, 'message':hi_answer, 'random_id':0}) 
@@ -400,7 +399,6 @@ def recruitment_team_31(event, user_id, response, bulk):
           data = (" SELECT user_id FROM Groups")
           id_user = cursor.execute(data)
           id_user = id_user.fetchall()
-          print("1")
           for i in range(len(id_user)):
               id_id = id_user[i]
               id_id = id_id[0]
@@ -409,6 +407,7 @@ def recruitment_team_31(event, user_id, response, bulk):
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
           nullify_step(user_id, step=0)
           update_recruitment_group(user_id, "")
+          update_recruitment(user_id, "")
           vk_session.method('messages.send', {'peer_id': user_id, 'message':"надеюсь в скором времени к вам подключаться люди!(или нет)", 'random_id':0})
   except: pass
 
@@ -519,37 +518,43 @@ def recruitment_team_42_check(event, user_id, response, bulk):
         update_recruitment(user_id, "")
         nullify_step(message_id, 0)
         update_recruitment(message_id, "")
-          
-          
-          
-          
-          
-# Спрашиваем: группе или колледжу
-  # если ответ == группе: то
-  # Отправляем инструкцию 
-  # Получаем ответ (Цель и ссылка на беседу)
-  # Проверяем ранг 
-    # если ранг == ученик: то отправляем запрос Куратору
-      #  если Куратор одобряет: то рассылаем сообщение группе (Цель и ссылка на беседу)
-      #  если Куратор не одобряет: то отправляем сообщение ученику (Ваше обращение отклонено куратором)
-    # если ранг Куратор: то рассылаем сообщение группе
-  # если ответ == колледжу: то 
-  # Отправляем иструкцию
-  # Получаем ответ (Цель и ссылка на беседу)
-  # Проверяем ранг 
-    # если ранг < 1000: то отправляем запрос Администрации
-      # если Администрацию одобряет: то рассылаем сообщение колледжу (Цель и ссылка на беседу)
-      # если Администрацию не одобряет: то отправляем сообщение юзеру (Ваще обращение откланено Администрацией)
-    # если ранг <= 1000: то рассылаем сообщение колледжу
 
-# я без тебя в коде разобраться не могу сам, так как тут даже если обычные функции и все из ванильного Питона. 
-# Просто из-за малого опыта очень путаюсь, так что написал шаблон не на питоне, ну хоть что-то. я бы еще поделал, но мама зовет кушать :))
+    
+def homework_send(event, user_id, response):
+  if response == "домашняяработа":
+    if rang_check >= 1: 
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какой группе вы хотите отправить дз?", 'random_id':0})
+      update_step(user_id, 20)
 
+def homework_send_2(event, user_id, response):
+  if groupa(response) == "real":
+    if step_check(user_id) == 20:
+      update_homework(user_id, response)
+      update_step(user_id, 21)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"какое будет домашнее задание?", 'random_id':0})
+        
 
-            
-      
+def homework_send_3(event, user_id, response, bulk): 
+  try:
+    if step_check(user_id) == 21:
+      if groupa(response) != "real":
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Домашнее задание отправленно!", 'random_id':0})
+        conn = sqlite3.connect('botdatabase.db')
+        cursor = conn.cursor()
+        data = (" SELECT user_id FROM Groups")
+        id_user = cursor.execute(data)
+        id_user = id_user.fetchall()
+        grupa = homework_check(user_id)
 
-#_________________________________________________________________________________________________________________________
+        for i in range(len(id_user)):
+              id_id = id_user[i]
+              id_id = id_id[0]
+              id_id = int(id_id)
+              if grupa == group_check(user_id):
+                vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
+        nullify_step(user_id, 0)
+        update_homework(user_id, "")
+#___________________________________________________________________________________________________________________
 
 #                                            Административные функции
 #_________________________________________________________________________________________________________________________

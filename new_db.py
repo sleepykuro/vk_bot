@@ -1,17 +1,33 @@
 import sqlite3
 
-def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attendance = "", attendance_world = "", recruitment_group = "", recruitment = ""):
+def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attendance = "", attendance_world = "", recruitment_group = "", recruitment = "", homework = ""):
     
-    data = [user_id, user_group, step, rang, bulk, attendance, attendance_world, recruitment_group, recruitment]
+    data = [user_id, user_group, step, rang, bulk, attendance, attendance_world, recruitment_group, recruitment, homework]
     
     conn = sqlite3.connect('botdatabase.db')
     cursor = conn.cursor()
     
-    cursor.execute(" INSERT INTO Groups VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ", data)
+    cursor.execute(" INSERT INTO Groups VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ", data)
 
     conn.commit()
     cursor.close()
     conn.close()
+
+def homework_check(user_id=0):
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    homework = cursor.execute(f"""
+    SELECT homework 
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    homework = list(homework)[0][0]
+    
+    connect.commit()
+    connect.close()
+    return homework
 
 def attendance_check_world(user_id=0):
     connect = sqlite3.connect('botdatabase.db')
@@ -113,13 +129,14 @@ def update_recruitment(user_id=0, recruitment = ""):
     connect.commit()
     connect.close()
 
-def update_group(user_id=0,  user_group= ""):
+
+def update_homework(user_id=0,  homework= ""):
     connect = sqlite3.connect('botdatabase.db')
     cursor = connect.cursor()
 
     cursor.execute(f""" 
     UPDATE Groups 
-    SET user_group = '{user_group}'
+    SET homework = '{homework}'
     WHERE user_id = {user_id};
     """)
     connect.commit()
