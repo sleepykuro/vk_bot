@@ -1,13 +1,13 @@
 import sqlite3
 
-def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attendance = "", attendance_world = "", recruitment_group = "", recruitment = "", homework = ""):
+def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attendance = "", attendance_world = "", recruitment_group = "", recruitment = "", homework = "", chose_homework = ""):
     
-    data = [user_id, user_group, step, rang, bulk, attendance, attendance_world, recruitment_group, recruitment, homework]
+    data = [user_id, user_group, step, rang, bulk, attendance, attendance_world, recruitment_group, recruitment, homework, chose_homework]
     
     conn = sqlite3.connect('botdatabase.db')
     cursor = conn.cursor()
     
-    cursor.execute(" INSERT INTO Groups VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ", data)
+    cursor.execute(" INSERT INTO Groups VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ", data)
 
     conn.commit()
     cursor.close()
@@ -133,6 +133,29 @@ def update_recruitment(user_id=0, recruitment = ""):
 def update_homework(user_id=0,  homework= ""):
     connect = sqlite3.connect('botdatabase.db')
     cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET homework = '{homework}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
+def day_homework(user_id=0,  homework= "", subject = ""):
+    
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    old_homework = cursor.execute(f"""
+    SELECT homework 
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    old_homework = old_homework.fetchall()[0][0]
+    new_homework = "\n" + subject + ": " + homework
+    homework = old_homework + new_homework
 
     cursor.execute(f""" 
     UPDATE Groups 
@@ -312,3 +335,30 @@ def update_group(user_id=0,  user_group= ""):
     connect.commit()
     connect.close()
 
+def chose_homework_check(user_id=0):
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    chose_homework = cursor.execute(f"""
+    SELECT chose_homework 
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    chose_homework = chose_homework.fetchall()[0][0]
+    
+    connect.commit()
+    connect.close()
+    return chose_homework
+
+def update_chose_homework(user_id=0,  chose_homework= ""):
+    connect = sqlite3.connect('botdatabase.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET chose_homework = '{chose_homework}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()

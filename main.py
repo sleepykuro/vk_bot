@@ -1,6 +1,7 @@
 from first_layer import *
 database_connection()
 while bot_on() != 'off': 
+    delete_homework(bot_on())
     for event in longpoll.listen():      
         user_id = take_event_user_id(event)
         response = take_user_response(event)
@@ -63,6 +64,11 @@ while bot_on() != 'off':
             homework_send_2(event, user_id, response)
 
             homework_send_3(event, user_id, response, bulk)
+
+            homework_send_notification(event, user_id, response)
+
+            homework_send_notification_2(event, user_id, response)
+
 
 #_________________________________________________________________________________________________________________________
 

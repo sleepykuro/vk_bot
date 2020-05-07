@@ -8,7 +8,7 @@ import random
 import sqlite3
 import re
 
-tokenn = open(r"C:\Users\alfas\Desktop\token.txt", "r")
+tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
 tokenn = tokenn.read()
 vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
@@ -24,7 +24,7 @@ def database_connection():
       self.user_rang = user_rang 
 
 def bot_on():
-  pass
+  return "on"
 
 def take_event_user_id(event):
   if event.type == VkEventType.MESSAGE_NEW:
@@ -524,6 +524,11 @@ def homework_send(event, user_id, response):
     if rang_check(user_id) >= 1: 
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какой группе вы хотите отправить дз?", 'random_id':0})
       update_step(user_id, 20)
+    if rang_check(user_id) < 1:
+      if homework_check(user_id) == "":
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Домашки пока нет", 'random_id':0})
+      else:
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':homework_check(user_id), 'random_id':0})
 
 def homework_send_2(event, user_id, response):
   if groupa(response) == "real":
@@ -550,11 +555,53 @@ def homework_send_3(event, user_id, response, bulk):
               id_id = id_id[0]
               id_id = int(id_id)
               if grupa == group_check(id_id):
-                update_homework(id_id, bulk)
-                vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
+                day_homework(id_id, bulk, group_check(user_id))
+                if chose_homework_check(id_id) == '1':
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':f"домашнее задание по предмету {group_check(user_id)} \n {bulk}", 'random_id':0})
+                if chose_homework_check(id_id) == "":
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':f"домашнее задание по предмету {group_check(user_id)} \n {bulk}", 'random_id':0})
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n Если хотите настроить отравку вам уведомлений то напишите - уведомления", 'random_id':0})
+                
+                
         nullify_step(user_id, 0)
         update_homework(user_id, "")
   except: pass
+
+def homework_send_notification(event, user_id, response):
+  if response == "уведомление":
+    update_step(user_id, step = 30)
+    vk_session.method('messages.send', {'peer_id': user_id, 'message':"Хотите ли вы получать домашнее задание сразу\n да\нет", 'random_id':0})
+
+def homework_send_notification_2(event, user_id, response):
+  try: 
+    if response == "да":
+      if step_check(user_id) == 30:
+        update_chose_homework(user_id, 1)
+        nullify_step(user_id, 0)
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"отлично! теперь буду прислать вам домашнее задание ", 'random_id':0})
+    if response == "нет":
+      if step_check(user_id) == 30:
+        update_chose_homework(user_id, 0)
+        nullify_step(user_id, 0)
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Хорошо не буду беспокоить", 'random_id':0})   
+  except: pass 
+
+def delete_homework(bot_on):
+  if bot_on == "on":
+    if str(datetime.strftime(datetime.now(), "%H:%M")) == '12:40':
+        print("дом")
+        conn = sqlite3.connect('botdatabase.db')
+        cursor = conn.cursor()
+        data = (" SELECT user_id FROM Groups")
+        id_user = cursor.execute(data)
+        id_user = id_user.fetchall()
+
+        for i in range(len(id_user)):
+          id_id = id_user[i]
+          id_id = id_id[0]
+          id_id = int(id_id)
+          update_homework(id_id, "")
+
 
 
 
