@@ -8,7 +8,7 @@ import random
 import sqlite3
 import re
 
-tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
+tokenn = open(r"C:\Users\alfas\Desktop\token.txt", "r")
 tokenn = tokenn.read()
 vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
@@ -102,7 +102,9 @@ def help_user(event,user_id, response):
     \n5. Сообщение группе: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всей группе(в разроботке))
     \n6. Сообщение колледжу: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всему колледжу)
     \n7. Игра (простая игра) 
-    \n8. Время(показывает время до конца пары)""", 'random_id':0})
+    \n8. Время(показывает время до конца пары)
+    \n9. Домашнее задание(Проподаватели могуть выслать дз с помощью этой команды, а ученики могут его посмотреть)
+    \n10. Уведомления (Настройка получения удомлений о домашнем задании)""", 'random_id':0})
 
 def bulk_message(event,user_id, response, bulk):
   try:
