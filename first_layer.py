@@ -175,41 +175,6 @@ def bulk_message(event,user_id, response, bulk):
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0})
                 break
-  except: pass
-  
-def bulk_message_check(event,user_id, response): 
-  try:
-    if response == "да" or response == "одобряю": 
-          if step_check(user_id) == 10:
-            message_id = bulk_check_id(user_id)
-            vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
-            bulk = bulk_check(message_id)
-            conn = sqlite3.connect('botdatabase.db')
-            cursor = conn.cursor()
-            data = (" SELECT user_id FROM Groups")
-            id_user = cursor.execute(data)
-            id_user = id_user.fetchall()
-
-            for i in range(len(id_user)):
-                id_id = id_user[i]
-                id_id = id_id[0]
-                id_id = int(id_id)
-                if rang_check(id_id) < 0.100:
-                    vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
-            nullify_step(user_id, step = 0)
-            update_bulk(user_id, "")
-            update_bulk(message_id, "")
-    elif response == "нет" or "неодобряю": 
-            if step_check(user_id) == 10:
-              message_id = int(bulk_check(user_id))
-              vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения отклонена", 'random_id':0})
-              nullify_step(user_id, step = 0)
-              update_bulk(user_id, "")
-              update_bulk(message_id, "")
-  except: pass
-
-def group_message(event,user_id, response, bulk):
-  try:
     if "сообщениегруппе" in response:
       if rang_check(user_id) >= 0.050:
         group = group_check(user_id)
@@ -246,6 +211,37 @@ def group_message(event,user_id, response, bulk):
                 update_bulk(id_id, str(user_id))
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0})
+  except: pass
+  
+def bulk_message_check(event,user_id, response): 
+  try:
+    if response == "да" or response == "одобряю": 
+          if step_check(user_id) == 10:
+            message_id = bulk_check_id(user_id)
+            vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
+            bulk = bulk_check(message_id)
+            conn = sqlite3.connect('botdatabase.db')
+            cursor = conn.cursor()
+            data = (" SELECT user_id FROM Groups")
+            id_user = cursor.execute(data)
+            id_user = id_user.fetchall()
+
+            for i in range(len(id_user)):
+                id_id = id_user[i]
+                id_id = id_id[0]
+                id_id = int(id_id)
+                if rang_check(id_id) < 0.100:
+                    vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
+            nullify_step(user_id, step = 0)
+            update_bulk(user_id, "")
+            update_bulk(message_id, "")
+    elif response == "нет" or "неодобряю": 
+            if step_check(user_id) == 10:
+              message_id = int(bulk_check(user_id))
+              vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения отклонена", 'random_id':0})
+              nullify_step(user_id, step = 0)
+              update_bulk(user_id, "")
+              update_bulk(message_id, "")
   except: pass
 
 def group_message_check(event,user_id, response): 
