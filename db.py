@@ -1,12 +1,12 @@
 import sqlite3
 
 def create_DB(): 
-    conn = sqlite3.connect('botdatabase.db') # записываем database
+    conn = sqlite3.connect('day_attendance.db') # записываем database
     cursor = conn.cursor()
     
 
     cursor.execute(""" CREATE TABLE Groups 
-    (user_id text, user_group text, step text, rang text, bulk_message text, attendance text, attendance_world text, recruitment_group text, recruitment text, homework text, chose_homework text )
+    (user_id text, user_name text, subject_1 text, user_attendance_1 text,  subject_2 text, user_attendance_2 text,  subject_3 text, user_attendance_3 text , subject_4 text, user_attendance_4 text,  subject_5 text, user_attendance_5 text , subject_6 text, user_attendance_6 text )
                 """)
 
 

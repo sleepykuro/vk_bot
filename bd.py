@@ -1,7 +1,17 @@
-from datetime import datetime
+import sqlite3
 
-print(str(datetime.strftime(datetime.now(), "%H:%M")))
-
-while True:
+def create_DB(): 
+    conn = sqlite3.connect('.db') 
+    cursor = conn.cursor()
     
-        print("э") 
+
+    cursor.execute(""" CREATE TABLE Groups 
+    (user_id text, user_group text, step text, rang text, bulk_message text, attendance text, attendance_world text, recruitment_group text, recruitment text, homework text, chose_homework text )
+                """)
+
+
+    
+    conn.commit()
+    conn.close()
+
+create_DB()

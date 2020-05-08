@@ -284,7 +284,7 @@ def attendance_1(event, user_id, response):
       data = (" SELECT user_id FROM Groups")
       id_user = cursor.execute(data)
       id_user = id_user.fetchall()
-
+      all_users_attendance = ""
       for i in range(len(id_user)):
           id_id = id_user[i]
           id_id = id_id[0]
@@ -299,8 +299,9 @@ def attendance_1(event, user_id, response):
             first_name=user_get['first_name']
             last_name=user_get['last_name']
             full_name=first_name+" "+last_name
-            all_users_attendance = full_name + ": " + attendance
-            vk_session.method('messages.send', {'peer_id': user_id, 'message':all_users_attendance, 'random_id':0})
+            users_attendance = full_name + ": " + attendance
+            all_users_attendance = all_users_attendance +"\n" +users_attendance  
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':all_users_attendance, 'random_id':0})
 
 def attendance_2(event, user_id, response):
   try:
