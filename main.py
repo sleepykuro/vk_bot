@@ -37,9 +37,13 @@ while bot_on() != 'off':
 
             attendance_1(event, user_id, response)
 
+            attendance_1_keyboard_2(event, user_id, response)
+
             attendance_2(event, user_id, response)
 
             attendance_3(event, user_id, response)
+
+            attendance_3_world(event, user_id, response)
 
             attendance_world_check(event, user_id, response)
 

@@ -10,13 +10,11 @@ import re
 import json
 
 
-tokenn = open(r"C:\Users\alfas\Desktop\token.txt", "r")
+tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
 tokenn = tokenn.read()
 vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
-
-# vk._auth_token()
 
 def get_button(label, color, payload=""):
     return {
@@ -30,12 +28,13 @@ def get_button(label, color, payload=""):
 
 
 keyboard = {
-    "one_time": False,
+    "one_time": True,
     "buttons": [
     [
-    get_button(label="Кнопка 1", color="primary"),
-    get_button(label="Кнопка 2", color="primary"),
-    get_button(label="Кнопка 3", color="primary")
+    get_button(label="Програмисты", color="secondary"),
+    get_button(label="Разроботчики", color="secondary"),
+    get_button(label="Комерция", color="secondary"),
+    get_button(label="Безопасники", color="secondary")
     ]
     ]
 }
@@ -208,6 +207,7 @@ def bulk_message_check(event,user_id, response):
               update_bulk(user_id, "")
               update_bulk(message_id, "")
   except: pass
+
 def group_message(event,user_id, response, bulk):
   try:
     if "сообщениегруппе" in response:
@@ -307,8 +307,23 @@ def timetable(event, user_id, response):
 def attendance_1(event, user_id, response):
   if response == "посещаемость":
     if rang_check(user_id) >= 1:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="Програмисты", color="primary")],
+            [
+              get_button(label="Разроботчики", color="primary"),
+              get_button(label="Комерция", color="primary")
+            ],
+            [get_button(label="Безопасники", color="primary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
       update_step(user_id, step=30)
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':"пожалуйста укажите номер группы", 'random_id':0})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Пожалуйста выберите Курс", 'random_id':0, "keyboard": keyboard})
     if rang_check(user_id) >= 0.050 and rang_check(user_id) < 1:
       group = group_check(user_id)
       conn = sqlite3.connect('botdatabase.db')
@@ -335,18 +350,452 @@ def attendance_1(event, user_id, response):
             all_users_attendance = all_users_attendance +"\n" +users_attendance  
       vk_session.method('messages.send', {'peer_id': user_id, 'message':all_users_attendance, 'random_id':0})
 
-def attendance_2(event, user_id, response):
-  try:
+def attendance_1_keyboard_2(event, user_id, response):
+  if response == "програмисты":
     if step_check(user_id) == 30:
-      if groupa(response) == "real":
-        update_attendance(user_id, response)
-        update_step(user_id, step=31)
-        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Напишите слово для проверки", 'random_id':0})
-  except: pass
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="Первый курс", color="primary"),
+            get_button(label="Второй курс", color="primary")
+            ],
+            [
+            get_button(label="Третий курс", color="primary"),
+            get_button(label="Четвертый курс", color="primary")
+            ],
+            [
+              get_button(label="<<< Специальности", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+
+      update_step(user_id, step=31)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard})
+  if response == "разроботчики":
+    if step_check(user_id) == 30:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="Первый курс", color="primary"),
+            get_button(label="Второй курс", color="primary")
+            ],
+            [
+            get_button(label="Третий курс", color="primary"),
+            get_button(label="Четвертый курс", color="primary")
+            ],
+            [
+              get_button(label="<<< Специальности", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+
+      update_step(user_id, step=32)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard})
+  if response == "комерция":
+    if step_check(user_id) == 30:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="Первый курс", color="primary"),
+            get_button(label="Второй курс", color="primary")
+            ],
+            [
+            get_button(label="Третий курс", color="primary"),
+            get_button(label="Четвертый курс", color="primary")
+            ],
+            [
+              get_button(label="<<< Специальности", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+
+      update_step(user_id, step=33)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard})
+  if response == "безопасники":
+    if step_check(user_id) == 30:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="Первый курс", color="primary"),
+            get_button(label="Второй курс", color="primary")
+            ],
+            [
+            get_button(label="Третий курс", color="primary"),
+            get_button(label="Четвертый курс", color="primary")
+            ],
+            [
+              get_button(label="<<< Специальности", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+
+      update_step(user_id, step=34)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите курс!", 'random_id':0, "keyboard": keyboard})
+
+def attendance_2(event, user_id, response):
+  if response == "ltспециальности":
+    keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="Програмисты", color="primary")],
+            [
+              get_button(label="Разроботчики", color="primary"),
+              get_button(label="Комерция", color="primary")
+            ],
+            [get_button(label="Безопасники", color="primary")
+            ]
+            ]
+        }
+    keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+    keyboard = str(keyboard.decode('utf-8'))
+    update_step(user_id, step=30)
+    vk_session.method('messages.send', {'peer_id': user_id, 'message':"Пожалуйста выберите Курс", 'random_id':0, "keyboard": keyboard})
+
+  if response == "первыйкурс":
+    if step_check(user_id) == 31:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="1п1.19", color="primary"),
+            get_button(label="1п2.19", color="primary"),
+            get_button(label="1п3.19", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "первыйкурс":
+    if step_check(user_id) == 32:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="1р1.19", color="primary"),
+            get_button(label="1р2.19", color="primary"),
+            get_button(label="1р3.19", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "первыйкурс":
+    if step_check(user_id) == 33:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="1к1.19", color="primary"),
+            get_button(label="1к2.19", color="primary"),
+            get_button(label="1к3.19", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "первыйкурс":
+    if step_check(user_id) == 34:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="1иб1.19", color="primary"),
+            get_button(label="1иб2.19", color="primary"),
+            get_button(label="1иб3.19", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "второйкурс":
+    if step_check(user_id) == 31:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="2п1.18", color="primary"),
+            get_button(label="2п2.18", color="primary"),
+            get_button(label="2п3.18", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "второйкурс":
+    if step_check(user_id) == 32:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="2р1.18", color="primary"),
+            get_button(label="2р2.18", color="primary"),
+            get_button(label="2р3.18", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "второйкурс":
+    if step_check(user_id) == 33:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="2к1.18", color="primary"),
+            get_button(label="2к2.18", color="primary"),
+            get_button(label="2к3.18", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "второйкурс":
+    if step_check(user_id) == 34:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="2иб1.18", color="primary"),
+            get_button(label="2иб2.18", color="primary"),
+            get_button(label="2иб3.18", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "третийкурс":
+    if step_check(user_id) == 31:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="3п1.17", color="primary"),
+            get_button(label="3п2.17", color="primary"),
+            get_button(label="3п3.17", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "третийкурс":
+    if step_check(user_id) == 32:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="3р1.17", color="primary"),
+            get_button(label="3р2.17", color="primary"),
+            get_button(label="3р3.17", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "третийкурс":
+    if step_check(user_id) == 33:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="3к1.17", color="primary"),
+            get_button(label="3к2.17", color="primary"),
+            get_button(label="3к3.17", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "третийкурс":
+    if step_check(user_id) == 34:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="3иб1.17", color="primary"),
+            get_button(label="3иб2.17", color="primary"),
+            get_button(label="3иб3.17", color="primary"),
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "четвертыйкурс":
+    if step_check(user_id) == 31:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="4п1.17", color="primary")
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "четвертыйкурс":
+    if step_check(user_id) == 32:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="4п1.17", color="primary")
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "четвертыйкурс":
+    if step_check(user_id) == 33:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="4п1.17", color="primary")
+
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
+  if response == "четвертыйкурс":
+    if step_check(user_id) == 34:
+      keyboard = {
+            "one_time": True,
+            "buttons": [
+            [
+            get_button(label="4п1.17", color="primary")
+            ],
+            [
+              get_button(label="<<< курсы", color="secondary")
+            ]
+            ]
+        }
+      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+      keyboard = str(keyboard.decode('utf-8'))
+      update_step(user_id, step=35)
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
 
 def attendance_3(event, user_id, response):
   try:
-    if step_check(user_id) == 31:
+    if step_check(user_id) == 35:
+      if groupa(response) == "real":
+        update_attendance(user_id, response)
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Введите слово!", 'random_id':0})
+        update_step(user_id, step=36)
+
+      if response == "ltкурсы":
+        keyboard = {
+              "one_time": True,
+              "buttons": [
+              [
+              get_button(label="Первый курс", color="primary"),
+              get_button(label="Второй курс", color="primary")
+              ],
+              [
+              get_button(label="Третий курс", color="primary"),
+              get_button(label="Четвертый курс", color="primary")
+              ],
+              [
+                get_button(label="<<< Специальности", color="secondary")
+              ]
+              ]
+          }
+        keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+        keyboard = str(keyboard.decode('utf-8'))
+        update_step(user_id, step=31)
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard})
+  except: pass
+
+def attendance_3_world(event, user_id, response):
+  try:
+    if step_check(user_id) == 36:
       if groupa(response) != "real":
         update_attendance_world(user_id, response)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично !", 'random_id':0})
@@ -362,7 +811,7 @@ def attendance_3(event, user_id, response):
                 id_id = id_id[0]
                 id_id = int(id_id)
                 if attendance_check(user_id) == group_check(id_id):
-                  update_step(id_id, step=32)
+                  update_step(id_id, step=37)
                   update_attendance_world(id_id, response)
                   update_attendance(id_id, group_check(user_id))
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':"Введите слово!", 'random_id':0})
@@ -374,14 +823,14 @@ def attendance_3(event, user_id, response):
 def attendance_world_check(event, user_id, response):
   try:
     if response == attendance_check_world(user_id):
-        if step_check(user_id) == 32:
+        if step_check(user_id) == 37:
             subject = attendance_check(user_id)
             update_attendance(user_id, attendance = subject + " " + str(datetime.strftime(datetime.now(), "%H:%M")))
             vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично вы отметелись !", 'random_id':0})
             update_step(user_id, step = 0)
             update_attendance_world(user_id, attendance_world = "")
     elif response != attendance_check_world(user_id):
-      if step_check(user_id) == 32:
+      if step_check(user_id) == 37:
         update_step(user_id, step = 0)
         update_attendance(user_id, attendance_world = "прогул")
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Не верное слово:(", 'random_id':0})
@@ -577,7 +1026,6 @@ def recruitment_team_42_check(event, user_id, response, bulk):
         update_recruitment(user_id, "")
         nullify_step(message_id, 0)
         update_recruitment(message_id, "")
-
     
 def homework_send(event, user_id, response):
   if hw(response) == "real":
@@ -597,7 +1045,6 @@ def homework_send_2(event, user_id, response):
       update_step(user_id, 61)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"какое будет домашнее задание?", 'random_id':0})
         
-
 def homework_send_3(event, user_id, response, bulk): 
   try:
     if step_check(user_id) == 61:
