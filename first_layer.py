@@ -7,13 +7,45 @@ import time
 import random
 import sqlite3
 import re
+import json
 
-tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
+
+tokenn = open(r"C:\Users\alfas\Desktop\token.txt", "r")
 tokenn = tokenn.read()
 vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
 
+# vk._auth_token()
+
+def get_button(label, color, payload=""):
+    return {
+        "action": {
+            "type": "text",
+            "payload": json.dumps(payload),
+            "label": label
+            },
+            "color": color
+    }
+
+
+keyboard = {
+    "one_time": False,
+    "buttons": [
+    [
+    get_button(label="Кнопка 1", color="primary"),
+    get_button(label="Кнопка 2", color="primary"),
+    get_button(label="Кнопка 3", color="primary")
+    ]
+    ]
+}
+
+keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+keyboard = str(keyboard.decode('utf-8'))
+
+def keyboard_(event, user_id, response):
+  if response == "клавиатура":
+     vk_session.method("messages.send", {"user_id": user_id, "message": "Попочка*", "random_id": 0, "keyboard": keyboard})
 
 def database_connection():
   class User():

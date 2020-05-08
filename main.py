@@ -9,6 +9,8 @@ while bot_on() != 'off':
         user_message(event,user_id, response)
         if event.from_user and not (event.from_me):
             
+            keyboard_(event, user_id, response)
+
             hello(event,user_id, response)
 
             regestration_info(event,user_id, response) 
