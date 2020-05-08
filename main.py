@@ -5,7 +5,7 @@ while bot_on() != 'off':
     for event in longpoll.listen():      
         user_id = take_event_user_id(event)
         response = take_user_response(event)
-        bulk = take_user_response_not_general_reg(event, response)
+        bulk = take_user_response_not_general_reg(event)
         user_message(event,user_id, response)
         if event.from_user and not (event.from_me):
             
@@ -20,12 +20,14 @@ while bot_on() != 'off':
             regestration_two(event,user_id, response)
             
             help_user(event,user_id, response) 
+
+            bulk_message(event, user_id, response)
+
+            bulk_message_take(event, user_id, response)
             
-            bulk_message(event,user_id, response, bulk)
+            bulk_group_message(event,user_id, response, bulk)
 
             bulk_message_check(event,user_id, response)
-
-            group_message(event,user_id, response, bulk)
 
             group_message_check(event,user_id, response)
 
