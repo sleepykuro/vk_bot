@@ -8,12 +8,13 @@ import random
 import sqlite3
 import re
 
-tokenn = open(r"C:\Users\alfas\Desktop\token.txt", "r")
+tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
 tokenn = tokenn.read()
 vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
- 
+
+
 def database_connection():
   class User():
 
@@ -99,7 +100,7 @@ def help_user(event,user_id, response):
     \n2. Help (Список комманд доступный вашему статусу)
     \n3. Как зарегестрироваться ? (Дает всю информацию о том как зарегестрировать себя в боте)
     \n4. Сообщение колледжу: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всему колледжу)
-    \n5. Сообщение группе: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всей группе(в разроботке))
+    \n5. Сообщение группе: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всей группе)
     \n6. Сообщение колледжу: тут ваше сообщение (писать так же как в примере, одним сообщением, и ваше сообщение будет отправленно всему колледжу)
     \n7. Игра (простая игра) 
     \n8. Время(показывает время до конца пары)
@@ -220,7 +221,6 @@ def group_message_check(event,user_id, response):
       if response == "да" or response == "одобряю": 
         if step_check(user_id) == 10:
           message_id = bulk_check_id(user_id)
-          # message_id = int(message_id)
           vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
           bulk = bulk_check(message_id)
           group = group_check(user_id)
@@ -277,7 +277,30 @@ def attendance_1(event, user_id, response):
     if rang_check(user_id) >= 1:
       update_step(user_id, step=30)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"пожалуйста укажите номер группы", 'random_id':0})
-    else: vk_session.method('messages.send', {'peer_id': user_id, 'message':"Вы не являетесь преподователем ", 'random_id':0})
+    if rang_check(user_id) >= 0.050 and rang_check(user_id) < 1:
+      group = group_check(user_id)
+      conn = sqlite3.connect('botdatabase.db')
+      cursor = conn.cursor()
+      data = (" SELECT user_id FROM Groups")
+      id_user = cursor.execute(data)
+      id_user = id_user.fetchall()
+
+      for i in range(len(id_user)):
+          id_id = id_user[i]
+          id_id = id_id[0]
+          id_id = int(id_id)
+          if group == group_check(id_id):   
+            attendance = attendance_check(id_id)
+            if attendance == "":
+              attendance = "прогул"
+            vk = vk_session.get_api() 
+            user_get=vk.users.get(user_ids = (id_id))
+            user_get=user_get[0]
+            first_name=user_get['first_name']
+            last_name=user_get['last_name']
+            full_name=first_name+" "+last_name
+            all_users_attendance = full_name + ": " + attendance
+            vk_session.method('messages.send', {'peer_id': user_id, 'message':all_users_attendance, 'random_id':0})
 
 def attendance_2(event, user_id, response):
   try:
@@ -308,6 +331,7 @@ def attendance_3(event, user_id, response):
                 if attendance_check(user_id) == group_check(id_id):
                   update_step(id_id, step=32)
                   update_attendance_world(id_id, response)
+                  update_attendance(id_id, group_check(user_id))
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':"Введите слово!", 'random_id':0})
         nullify_step(user_id, step = 0)
         update_attendance_world(user_id, "")
@@ -318,14 +342,15 @@ def attendance_world_check(event, user_id, response):
   try:
     if response == attendance_check_world(user_id):
         if step_check(user_id) == 32:
-            update_attendance(user_id, attendance = str(datetime.strftime(datetime.now(), "%H:%M")))
+            subject = attendance_check(user_id)
+            update_attendance(user_id, attendance = subject + " " + str(datetime.strftime(datetime.now(), "%H:%M")))
             vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично вы отметелись !", 'random_id':0})
             update_step(user_id, step = 0)
             update_attendance_world(user_id, attendance_world = "")
     elif response != attendance_check_world(user_id):
       if step_check(user_id) == 32:
         update_step(user_id, step = 0)
-        update_attendance_world(user_id, attendance_world = "прогул")
+        update_attendance(user_id, attendance_world = "прогул")
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Не верное слово:(", 'random_id':0})
   except: pass
 
@@ -522,7 +547,7 @@ def recruitment_team_42_check(event, user_id, response, bulk):
 
     
 def homework_send(event, user_id, response):
-  if response == "домашняяработа":
+  if hw(response) == "real":
     if rang_check(user_id) >= 1: 
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какой группе вы хотите отправить дз?", 'random_id':0})
       update_step(user_id, 60)

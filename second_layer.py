@@ -40,6 +40,11 @@ def hello_check(resp):
     if resp in a:
         return 'привет'
 
+def hw(resp):
+    a = ["домашняяработа","домашнеезадание","дз","homework","домашка","задание"]
+    if resp in a:
+        return 'real'
+
 def registration_check(response): #Добавил вариаций вызыва функции регистрации
     reg = ["какзарегистироваться","зарегистрироваться",
     "регистрация","какрегистрироваться","reg","registration"]
