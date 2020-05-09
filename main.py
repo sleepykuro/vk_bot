@@ -9,8 +9,6 @@ while bot_on() != 'off':
         user_message(event,user_id, response)
         if event.from_user and not (event.from_me):
             
-            keyboard_(event, user_id, response)
-
             hello(event,user_id, response)
 
             regestration_info(event,user_id, response) 
@@ -76,6 +74,10 @@ while bot_on() != 'off':
             recruitment_team_42_check(event, user_id, response, bulk)
 
             homework_send(event, user_id, response)
+
+            homework_send_1(event, user_id, response)
+
+            homework_send_1_2(event, user_id, response)
 
             homework_send_2(event, user_id, response)
 
