@@ -2,6 +2,7 @@ import random
 import sqlite3
 import numpy as np
 from datetime import datetime, date, time
+import json
 
 def hi_answer_random(hi):
     if hi == 'hi':
@@ -81,6 +82,17 @@ def subject_check(response):
     "высшаяматематика","верстка","дизайн"]#нужно узнать пары у других групп и записать
     if response in a: 
         return 'real'
+
+def get_button(label, color, payload=""):
+    return {
+        "action": {
+            "type": "text",
+            "payload": json.dumps(payload),
+            "label": label
+            },
+            "color": color
+    }
+
 
 
 

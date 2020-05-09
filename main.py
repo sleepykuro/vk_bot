@@ -18,6 +18,14 @@ while bot_on() != 'off':
             regestration_one(event,user_id, response) 
             
             regestration_two(event,user_id, response)
+
+            regestration_for_kurator(event, user_id, response)
+
+            regestration_for_kurator_2(event, user_id, response)
+
+            regestration_for_starosta(event, user_id, response)
+
+            regestration_for_starosta_2(event, user_id, response)
             
             help_user(event,user_id, response) 
 
