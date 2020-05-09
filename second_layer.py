@@ -4,6 +4,25 @@ import numpy as np
 from datetime import datetime, date, time
 import json
 
+
+groups = {
+   "course_1": "1",
+   "course_2": "2",
+   "course_3": "3",
+   "course_4": "4",
+
+   "letter_1": "п",
+   "letter_2": "р",
+   "letter_3": "к",
+   "letter_4": "иб",
+
+   "year_1": "19",
+   "year_2": "18",
+   "year_3": "17",
+   "year_4": "16"
+
+}
+
 def hi_answer_random(hi):
     if hi == 'hi':
         r = random.randint(1,11)
