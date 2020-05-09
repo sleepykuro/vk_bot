@@ -16,17 +16,6 @@ vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
 
-def get_button(label, color, payload=""):
-    return {
-        "action": {
-            "type": "text",
-            "payload": json.dumps(payload),
-            "label": label
-            },
-            "color": color
-    }
-
-
 keyboard = {
     "one_time": True,
     "buttons": [
@@ -113,6 +102,50 @@ def regestration_two(event, user_id, response):
             vk_session.method('messages.send', {'user_id': user_id, 'message':'Поменять статус, можно только после одобрения Куратора', 'random_id':0})
       except IndexError:
         vk_session.method('messages.send', {'user_id': user_id, 'message':'сначала введите вашу группу', 'random_id':0})
+
+def regestration_for_kurator(event, user_id, response):
+  if response == "куратор20032003":
+    update_step(user_id, 80)
+    vk_session.method('messages.send', {'user_id': user_id, 'message':'Укажите группу которую будете курировать', 'random_id':0})
+
+def regestration_for_kurator_2(event, user_id, response):
+  try: 
+    if step_check(user_id) == 80:
+      if groupa(response) == "real":
+        update_group_for_startsta(user_id, response)
+        update_rang(user_id, "0.070")
+        nullify_step(user_id, 0)
+        vk_session.method('messages.send', {'user_id': user_id, 'message':'Отлично! надеюсь вы будете хорошим Куратором!', 'random_id':0})
+  except: pass
+
+def regestration_for_starosta(event, user_id, response):
+  if response == "староста":
+    update_step(user_id, 81)
+    vk_session.method('messages.send', {'user_id': user_id, 'message':'пароль на одобрение статуса отправлен куратору!', 'random_id':0})
+    vk_session.method('messages.send', {'user_id': user_id, 'message':'введите пароль', 'random_id':0})
+    update_group_for_startsta(user_id, random.randint(1000, 9999))
+    conn = sqlite3.connect('botdatabase.db')
+    cursor = conn.cursor()
+    data = (" SELECT user_id FROM Groups")
+    id_user = cursor.execute(data)
+    id_user = id_user.fetchall()
+
+    for i in range(len(id_user)):
+      id_id = id_user[i]
+      id_id = id_id[0]
+      id_id = int(id_id)
+      if group_check(user_id) == group_for_startsta_check(id_id):
+        vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Пароль на получения статуса старосты {group_for_startsta_check(user_id)}", 'random_id':0})
+
+def regestration_for_starosta_2(event, user_id, response):
+  try:
+    if step_check(user_id) == 81:
+      if response == group_for_startsta_check(user_id):
+        nullify_step(user_id, 0)
+        update_rang(user_id, "0.050")
+        update_group_for_startsta(user_id, "")
+        vk_session.method('messages.send', {'user_id': user_id, 'message':'Надеюсь ты будешь хорошим старостой !', 'random_id':0})
+  except: pass
 
 def help_user(event,user_id, response):
   if response == "help" or response == "помощь" :   
@@ -207,7 +240,7 @@ def bulk_group_message(event,user_id, response, bulk):
                   break
     if response != "колледжу" and response != "группе" and response != "сообщение":
       if step_check(user_id) == 11:
-        if rang_check(user_id) >= 0.050:
+        if rang_check(user_id) >= 0.050 and rang_check(user_id) < 0.070:
           conn = sqlite3.connect('botdatabase.db')
           cursor = conn.cursor()
           data = (" SELECT user_id FROM Groups")
