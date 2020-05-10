@@ -172,6 +172,20 @@ bulk_keyboard = {
 bulk_keyboard = json.dumps(bulk_keyboard, ensure_ascii=False).encode('utf-8')
 bulk_keyboard = str(bulk_keyboard.decode('utf-8'))
 
+keyboard_lessons = {
+      "one_time": True,
+      "buttons": [
+      [get_button(label="1 пара", color="primary"),
+      get_button(label="2 пара", color="primary")],
+      [get_button(label="3 пара", color="primary"),
+      get_button(label="4 пара", color="primary")],
+      [get_button(label="5 пара", color="primary")]
+      ]
+    }
+
+keyboard_lessons = json.dumps(keyboard_lessons, ensure_ascii=False).encode('utf-8')
+keyboard_lessons = str(keyboard_lessons.decode('utf-8'))
+
 class Variables:
     where = 'курская'
     

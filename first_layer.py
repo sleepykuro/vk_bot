@@ -329,27 +329,38 @@ def bulk_group_message(event,user_id, response, bulk):
           id_user = all_user_ids()
           for i in range(len(id_user)):
             id_id = take_int_id(i, id_user)
-            if group_check(user_id) == group_check(id_id):
+            if group_for_startsta_check(user_id) == group_check(id_id):
               if id_id != user_id:
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
-
-      elif rang_check(user_id) < 0.050:
-          update_bulk(user_id, bulk)
-          group = group_check(user_id)
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Сообщние отправленно!", 'random_id':0})
+          nullify_step(user_id, 0)
+        if rang_check(user_id) == 0.070:
           id_user = all_user_ids()
           for i in range(len(id_user)):
             id_id = take_int_id(i, id_user)
-            if group == group_check(id_id):
-              if rang_check(id_id) >= 0.050:
-                if bulk_check_id(id_id) == "":
-                  vk_session.method('messages.send', {'user_id': user_id, 'message':"Ваше сообение направленно на одобрение старосте", 'random_id':0})
-                  update_step(id_id, step=12)
-                  update_bulk(id_id, str(user_id))
-                  vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
-                  vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard_yes_no})
-                elif bulk_check_id(id_id) != "":
-                  nullify_step(user_id, 0)
-                  vk_session.method('messages.send', {'peer_id': user_id, 'message':"сообщение другого пользователя пока не одобренно, попробуйте позже", 'random_id':0})                   
+            if group_check(user_id) == group_check(id_id):
+              if id_id != user_id:
+                vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
+          nullify_step(user_id, 0)
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Сообщние отправленно!", 'random_id':0})
+
+        elif rang_check(user_id) < 0.050:
+            update_bulk(user_id, bulk)
+            group = group_check(user_id)
+            id_user = all_user_ids()
+            for i in range(len(id_user)):
+              id_id = take_int_id(i, id_user)
+              if group == group_check(id_id):
+                if rang_check(id_id) >= 0.050:
+                  if bulk_check_id(id_id) == "":
+                    vk_session.method('messages.send', {'user_id': user_id, 'message':"Ваше сообение направленно на одобрение старосте", 'random_id':0})
+                    update_step(id_id, step=12)
+                    update_bulk(id_id, str(user_id))
+                    vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
+                    vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard_yes_no})
+                  elif bulk_check_id(id_id) != "":
+                    nullify_step(user_id, 0)
+                    vk_session.method('messages.send', {'peer_id': user_id, 'message':"сообщение другого пользователя пока не одобренно, попробуйте позже", 'random_id':0})                   
   except: pass
   
 def bulk_message_check(event,user_id, response): 
@@ -433,6 +444,7 @@ def attendance_1(event, user_id, response):
     if rang_check(user_id) >= 0.050 and rang_check(user_id) < 0.070:
       group = group_check(user_id)
       id_user = all_user_ids()
+      all_usersattendance = ""
       for i in range(len(id_user)):
         id_id = take_int_id(i, id_user)
         if group == group_check(id_id):   
@@ -446,26 +458,122 @@ def attendance_1(event, user_id, response):
           last_name=user_get['last_name']
           full_name=first_name+" "+last_name
           users_attendance = full_name + ": " + attendance
-          all_users_attendance = all_users_attendance +"\n" +users_attendance  
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':all_users_attendance, 'random_id':0})
+          all_usersattendance = all_usersattendance + "\n" + users_attendance  
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':all_usersattendance, 'random_id':0})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая это пара?", 'random_id':0, "keyboard": keyboard_lessons})
+      update_step(user_id, 90)
     if rang_check(user_id) == 0.070:
-      group = group_for_startsta_check(user_id)
       id_user = all_user_ids()
+      all_users_attendance = ""
       for i in range(len(id_user)):
         id_id = take_int_id(i, id_user)
-        if group == group_check(id_id):   
-          attendance = attendance_check(id_id)
-          if attendance == "":
-            attendance = "прогул"
+        if group_check(id_id) == group_for_startsta_check(user_id):   
+          users_attendance = lessons1_check(id_id)
           vk = vk_session.get_api() 
           user_get=vk.users.get(user_ids = (id_id))
           user_get=user_get[0]
           first_name=user_get['first_name']
           last_name=user_get['last_name']
           full_name=first_name+" "+last_name
-          users_attendance = full_name + ": " + attendance
+          users_attendance = full_name + ": " + users_attendance
+          all_users_attendance = all_users_attendance +"\n" +users_attendance 
+      vk_session.method('messages.send', {'peer_id': user_id, 'message': "     Первая пара     " + all_users_attendance, 'random_id':0})
+      all_users_attendance = ""
+      for i in range(len(id_user)):
+        id_id = take_int_id(i, id_user)
+        if group_check(id_id) == group_for_startsta_check(user_id):   
+          users_attendance = lessons2_check(id_id)
+          vk = vk_session.get_api() 
+          user_get=vk.users.get(user_ids = (id_id))
+          user_get=user_get[0]
+          first_name=user_get['first_name']
+          last_name=user_get['last_name']
+          full_name=first_name+" "+last_name
+          users_attendance = full_name + ": " + users_attendance
+          all_users_attendance =  all_users_attendance +"\n" +users_attendance  
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"     Вторая пара     " + all_users_attendance, 'random_id':0})
+      all_users_attendance = ""
+      for i in range(len(id_user)):
+        id_id = take_int_id(i, id_user)
+        if group_check(id_id) == group_for_startsta_check(user_id):   
+          users_attendance = lessons3_check(id_id)
+          vk = vk_session.get_api() 
+          user_get=vk.users.get(user_ids = (id_id))
+          user_get=user_get[0]
+          first_name=user_get['first_name']
+          last_name=user_get['last_name']
+          full_name=first_name+" "+last_name
+          users_attendance = full_name + ": " + users_attendance
           all_users_attendance = all_users_attendance +"\n" +users_attendance  
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':all_users_attendance, 'random_id':0})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"     Третья пара     " + all_users_attendance, 'random_id':0})
+      all_users_attendance = ""
+      for i in range(len(id_user)):
+        id_id = take_int_id(i, id_user)
+        if group_check(id_id) == group_for_startsta_check(user_id):   
+          users_attendance = lessons4_check(id_id)
+          vk = vk_session.get_api() 
+          user_get=vk.users.get(user_ids = (id_id))
+          user_get=user_get[0]
+          first_name=user_get['first_name']
+          last_name=user_get['last_name']
+          full_name=first_name+" "+last_name
+          users_attendance = full_name + ": " + users_attendance
+          all_users_attendance = all_users_attendance +"\n" +users_attendance  
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"     Четвертая пара     " + all_users_attendance, 'random_id':0})
+      all_users_attendance = ""
+      for i in range(len(id_user)):
+        id_id = take_int_id(i, id_user)
+        if group_check(id_id) == group_for_startsta_check(user_id):   
+          users_attendance = lessons5_check(id_id)
+          vk = vk_session.get_api() 
+          user_get=vk.users.get(user_ids = (id_id))
+          user_get=user_get[0]
+          first_name=user_get['first_name']
+          last_name=user_get['last_name']
+          full_name=first_name+" "+last_name
+          users_attendance = full_name + ": " + users_attendance
+          all_users_attendance = all_users_attendance +"\n" +users_attendance  
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"     Пятая пара     " + all_users_attendance, 'random_id':0})
+
+def send_attendance_in_alldaydb(event, user_id, response): 
+  try:
+    if step_check(user_id) == 90:
+      if response == "1пара":
+        id_user = all_user_ids()
+        for i in range(len(id_user)):
+          id_id = take_int_id(i, id_user) 
+          if group_check(id_id) == group_check(user_id):
+            update_lessons1(id_id, attendance_check(id_id))
+        nullify_step(user_id, 0)
+      if response == "2пара":
+        id_user = all_user_ids()
+        for i in range(len(id_user)):
+          id_id = take_int_id(i, id_user) 
+          if group_check(id_id) == group_check(user_id):
+            update_lessons2(id_id, attendance_check(id_id))
+        nullify_step(user_id, 0)
+      if response == "3пара":
+        id_user = all_user_ids()
+        for i in range(len(id_user)):
+          id_id = take_int_id(i, id_user) 
+          if group_check(id_id) == group_check(user_id):
+            update_lessons3(id_id, attendance_check(id_id))
+        nullify_step(user_id, 0)
+      if response == "4пара":
+        id_user = all_user_ids()
+        for i in range(len(id_user)):
+          id_id = take_int_id(i, id_user) 
+          if group_check(id_id) == group_check(user_id):
+            update_lessons4(id_id, attendance_check(id_id))
+        nullify_step(user_id, 0)
+      if response == "5пара":
+        id_user = all_user_ids()
+        for i in range(len(id_user)):
+          id_id = take_int_id(i, id_user) 
+          if group_check(id_id) == group_check(user_id):
+            update_lessons5(id_id, attendance_check(id_id))
+        nullify_step(user_id, 0)
+  except: pass   
 
 def attendance_1_keyboard_2(event, user_id, response):
   try:
@@ -978,9 +1086,8 @@ def homework_send_notification_2(event, user_id, response):
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Хорошо, не буду беспокоить", 'random_id':0})   
   except: pass 
 
-def delete_homework(bot_on):
-  if bot_on == "on":
-    if str(datetime.strftime(datetime.now(), "%H:%M")) == '12:40':
+def delete_homework():
+    if datetime.strftime(datetime.now(), "%H:%M") == '12:39':
       print("дом")
       conn = sqlite3.connect('botdatabase.db')
       cursor = conn.cursor()

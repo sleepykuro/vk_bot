@@ -1,7 +1,7 @@
 from first_layer import *
 database_connection()
 while bot_on() != 'off': 
-    delete_homework(bot_on())
+    delete_homework()
     for event in longpoll.listen():      
         user_id = take_event_user_id(event)
         response = take_user_response(event)
@@ -21,7 +21,7 @@ while bot_on() != 'off':
 
             regestration_for_kurator_2(event, user_id, response)
 
-            regestration_for_starosta(event, user_id, response)
+            regestration_for_starosta(event, user_id, response) 
 
             regestration_for_starosta_2(event, user_id, response)
             
@@ -44,6 +44,8 @@ while bot_on() != 'off':
             timetable(event,user_id, response)
 
             attendance_1(event, user_id, response)
+
+            send_attendance_in_alldaydb(event, user_id, response)
 
             attendance_1_keyboard_2(event, user_id, response)
 

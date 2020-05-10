@@ -1,6 +1,6 @@
 import sqlite3
 
-def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attendance = "", attendance_world = "", recruitment_group = "", recruitment = "", homework = "", chose_homework = "", group_for_startsta = ""):
+def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attendance = "", attendance_world = "", recruitment_group = "", recruitment = "", homework = "", chose_homework = "", group_for_startsta = "", lessons1 = "", lessons2 = "", lessons3 = "", lessons4 = "", lessons5 = ""):
     
     data = [user_id, user_group, step, rang, bulk, attendance, attendance_world, recruitment_group, recruitment, homework, chose_homework, group_for_startsta]
     
@@ -12,6 +12,17 @@ def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attenda
     conn.commit()
     cursor.close()
     conn.close()
+
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    data = [user_id, lessons1, lessons2, lessons3, lessons4, lessons5]
+
+    cursor.execute(" INSERT INTO Groups VALUES (?, ?, ?, ?, ?, ?) ", data)
+
+    connect.commit()
+    cursor.close()
+    connect.close()
 
 def all_user_ids():
     conn = sqlite3.connect('botdatabase.db')
@@ -401,3 +412,143 @@ def update_chose_homework(user_id=0,  chose_homework= ""):
     """)
     connect.commit()
     connect.close()
+
+def update_lessons1(user_id=0, lessons1= ""):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET lessons1 = '{lessons1}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
+def update_lessons2(user_id=0, lessons2= ""):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET lessons2 = '{lessons2}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
+def update_lessons3(user_id=0, lessons3= ""):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET lessons3 = '{lessons3}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
+def update_lessons4(user_id=0, lessons4= ""):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET lessons4 = '{lessons4}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
+def update_lessons5(user_id=0, lessons5= ""):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    cursor.execute(f""" 
+    UPDATE Groups 
+    SET lessons5 = '{lessons5}'
+    WHERE user_id = {user_id};
+    """)
+    connect.commit()
+    connect.close()
+
+def lessons1_check(user_id=0):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    lessons1 = cursor.execute(f"""
+    SELECT lessons1
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    lessons1 = list(lessons1)[0][0]
+    
+    connect.commit()
+    connect.close()
+    return lessons1
+
+def lessons2_check(user_id=0):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    lessons2 = cursor.execute(f"""
+    SELECT lessons2
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    lessons2 = list(lessons2)[0][0]
+    
+    connect.commit()
+    connect.close()
+    return lessons2
+
+def lessons3_check(user_id=0):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    lessons3 = cursor.execute(f"""
+    SELECT lessons3
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    lessons3 = list(lessons3)[0][0]
+    
+    connect.commit()
+    connect.close()
+    return lessons3
+
+def lessons4_check(user_id=0):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    lessons4 = cursor.execute(f"""
+    SELECT lessons4
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    lessons4 = list(lessons4)[0][0]
+    
+    connect.commit()
+    connect.close()
+    return lessons4
+
+def lessons5_check(user_id=0):
+    connect = sqlite3.connect('alldayattendance.db')
+    cursor = connect.cursor()
+
+    lessons5 = cursor.execute(f"""
+    SELECT lessons5
+    FROM Groups
+    WHERE user_id = {user_id}
+    """)
+    
+    lessons5 = list(lessons5)[0][0]
+    
+    connect.commit()
+    connect.close()
+    return lessons5
