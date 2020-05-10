@@ -16,21 +16,6 @@ vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
 
-keyboard = {
-    "one_time": True,
-    "buttons": [
-    [
-    get_button(label="Програмисты", color="secondary"),
-    get_button(label="Разроботчики", color="secondary"),
-    get_button(label="Комерция", color="secondary"),
-    get_button(label="Безопасники", color="secondary")
-    ]
-    ]
-}
-
-keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-keyboard = str(keyboard.decode('utf-8'))
-
 def database_connection():
   class User():
 
@@ -120,16 +105,9 @@ def regestration_for_starosta(event, user_id, response):
     vk_session.method('messages.send', {'user_id': user_id, 'message':'Пароль на одобрение статуса отправлен куратору!', 'random_id':0})
     vk_session.method('messages.send', {'user_id': user_id, 'message':'Введите пароль', 'random_id':0})
     update_group_for_startsta(user_id, random.randint(1000, 9999))
-    conn = sqlite3.connect('botdatabase.db')
-    cursor = conn.cursor()
-    data = (" SELECT user_id FROM Groups")
-    id_user = cursor.execute(data)
-    id_user = id_user.fetchall()
-
+    id_user = all_user_ids()
     for i in range(len(id_user)):
-      id_id = id_user[i]
-      id_id = id_id[0]
-      id_id = int(id_id)
+      id_id = take_int_id(i, id_user)
       if group_check(user_id) == group_for_startsta_check(id_id):
         vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Пароль на получения статуса старосты {group_for_startsta_check(user_id)}", 'random_id':0})
 
@@ -301,17 +279,8 @@ def help_user(event,user_id, response):
       """, 'random_id':0, "keyboard": keyboard})
 
 def bulk_message(event, user_id, response):
-  if response == "массовоесообщение": 
-    keyboard = {
-      "one_time": True,
-      "buttons": [
-      [get_button(label="Колледжу", color="primary")],
-      [get_button(label="Группе", color="primary"),]
-      ]
-    }
-    keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-    keyboard = str(keyboard.decode('utf-8'))
-    vk_session.method('messages.send', {'peer_id': user_id, 'message':"Кому вы хотите отправить сообщение ?", 'random_id':0, "keyboard": keyboard})
+  if response == "массовоесообщение":    
+    vk_session.method('messages.send', {'peer_id': user_id, 'message':"Кому вы хотите отправить сообщение ?", 'random_id':0, "keyboard": bulk_keyboard})
 
 def bulk_message_take(event, user_id, response):
   if response == "колледжу":
@@ -328,29 +297,15 @@ def bulk_group_message(event,user_id, response, bulk):
         if rang_check(user_id) >= 0.100:
           vk_session.method('messages.send', {'peer_id': user_id, 'message':"Сообщние отправленно!", 'random_id':0})
           nullify_step(user_id, 0)
-          conn = sqlite3.connect('botdatabase.db')
-          cursor = conn.cursor()
-          data = (" SELECT user_id FROM Groups")
-          id_user = cursor.execute(data)
-          id_user = id_user.fetchall()
-
+          id_user = all_user_ids()
           for i in range(len(id_user)):
-            id_id = id_user[i]
-            id_id = id_id[0]
-            id_id = int(id_id)
+            id_id = take_int_id(i, id_user)
             if id_id != user_id:
               vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
-
         elif rang_check(user_id) < 0.070:
           update_bulk(user_id, bulk)
-
           group = group_check(user_id)
-          conn = sqlite3.connect('botdatabase.db')
-          cursor = conn.cursor()
-          data = (" SELECT user_id FROM Groups")
-          id_user = cursor.execute(data)
-          id_user = id_user.fetchall()
-
+          id_user = all_user_ids()
           while True:
             id_id = id_user[i]
             id_id = id_id[0]
@@ -362,20 +317,7 @@ def bulk_group_message(event,user_id, response, bulk):
                   update_step(id_id, step=12)
                   update_bulk(id_id, str(user_id))
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
-                  keyboard = {
-                    "one_time": True,
-                    "buttons": [
-                    [
-                    get_button(label="Да", color="positive"),
-                    get_button(label="Нет", color="negative")
-                    ]
-                    ]
-                  }
-
-                  keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-                  keyboard = str(keyboard.decode('utf-8'))
-
-                  vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard})
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard_yes_no})
                   break
                 elif bulk_check_id(id_id) != "":
                   nullify_step(user_id, 0)
@@ -384,16 +326,9 @@ def bulk_group_message(event,user_id, response, bulk):
     if response != "колледжу" and response != "группе" and response != "сообщение":
       if step_check(user_id) == 11:
         if rang_check(user_id) >= 0.050 and rang_check(user_id) < 0.070:
-          conn = sqlite3.connect('botdatabase.db')
-          cursor = conn.cursor()
-          data = (" SELECT user_id FROM Groups")
-          id_user = cursor.execute(data)
-          id_user = id_user.fetchall()
-
+          id_user = all_user_ids()
           for i in range(len(id_user)):
-            id_id = id_user[i]
-            id_id = id_id[0]
-            id_id = int(id_id)
+            id_id = take_int_id(i, id_user)
             if group_check(user_id) == group_check(id_id):
               if id_id != user_id:
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
@@ -401,16 +336,9 @@ def bulk_group_message(event,user_id, response, bulk):
       elif rang_check(user_id) < 0.050:
           update_bulk(user_id, bulk)
           group = group_check(user_id)
-          conn = sqlite3.connect('botdatabase.db')
-          cursor = conn.cursor()
-          data = (" SELECT user_id FROM Groups")
-          id_user = cursor.execute(data)
-          id_user = id_user.fetchall()
-
+          id_user = all_user_ids()
           for i in range(len(id_user)):
-            id_id = id_user[i]
-            id_id = id_id[0]
-            id_id = int(id_id)
+            id_id = take_int_id(i, id_user)
             if group == group_check(id_id):
               if rang_check(id_id) >= 0.050:
                 if bulk_check_id(id_id) == "":
@@ -418,20 +346,7 @@ def bulk_group_message(event,user_id, response, bulk):
                   update_step(id_id, step=12)
                   update_bulk(id_id, str(user_id))
                   vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
-                  keyboard = {
-                    "one_time": True,
-                    "buttons": [
-                    [
-                    get_button(label="да", color="positive"),
-                    get_button(label="нет", color="negative")
-                    ]
-                    ]
-                  }
-
-                  keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-                  keyboard = str(keyboard.decode('utf-8'))
-
-                  vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard})
+                  vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard_yes_no})
                 elif bulk_check_id(id_id) != "":
                   nullify_step(user_id, 0)
                   vk_session.method('messages.send', {'peer_id': user_id, 'message':"сообщение другого пользователя пока не одобренно, попробуйте позже", 'random_id':0})                   
@@ -444,16 +359,9 @@ def bulk_message_check(event,user_id, response):
         message_id = bulk_check_id(user_id)
         vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
         bulk = bulk_check(message_id)
-        conn = sqlite3.connect('botdatabase.db')
-        cursor = conn.cursor()
-        data = (" SELECT user_id FROM Groups")
-        id_user = cursor.execute(data)
-        id_user = id_user.fetchall()
-
+        id_user = all_user_ids()
         for i in range(len(id_user)):
-          id_id = id_user[i]
-          id_id = id_id[0]
-          id_id = int(id_id)
+          id_id = take_int_id(i, id_user)
           if rang_check(id_id) < 0.100:
             vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
         nullify_step(user_id, step = 0)
@@ -476,16 +384,9 @@ def group_message_check(event,user_id, response):
         vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
         bulk = bulk_check(message_id)
         group = group_check(user_id)
-        conn = sqlite3.connect('botdatabase.db')
-        cursor = conn.cursor()
-        data = (" SELECT user_id FROM Groups")
-        id_user = cursor.execute(data)
-        id_user = id_user.fetchall()
-
+        id_user = all_user_ids()
         for i in range(len(id_user)):
-          id_id = id_user[i]
-          id_id = id_id[0]
-          id_id = int(id_id)
+          id_id = take_int_id(i, id_user)
           if group == group_check(id_id):
             vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
         nullify_step(user_id, step = 0)
@@ -527,31 +428,13 @@ def timetable(event, user_id, response):
 def attendance_1(event, user_id, response):
   if response == "посещаемость":
     if rang_check(user_id) >= 1:
-      keyboard = {
-        "one_time": True,
-        "buttons": [
-        [get_button(label="Программисты", color="primary")],
-        [get_button(label="Разработчики", color="primary"),
-         get_button(label="Коммерция", color="primary")],
-        [get_button(label="Безопасники", color="primary")]
-        ]
-      }
-      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-      keyboard = str(keyboard.decode('utf-8'))
       update_step(user_id, step=30)
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Пожалуйста выберите Курс", 'random_id':0, "keyboard": keyboard})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Пожалуйста выберите Курс", 'random_id':0, "keyboard": keyboard_profilse})
     if rang_check(user_id) >= 0.050 and rang_check(user_id) < 0.070:
       group = group_check(user_id)
-      conn = sqlite3.connect('botdatabase.db')
-      cursor = conn.cursor()
-      data = (" SELECT user_id FROM Groups")
-      id_user = cursor.execute(data)
-      id_user = id_user.fetchall()
-      all_users_attendance = ""
+      id_user = all_user_ids()
       for i in range(len(id_user)):
-        id_id = id_user[i]
-        id_id = id_id[0]
-        id_id = int(id_id)
+        id_id = take_int_id(i, id_user)
         if group == group_check(id_id):   
           attendance = attendance_check(id_id)
           if attendance == "":
@@ -567,16 +450,9 @@ def attendance_1(event, user_id, response):
       vk_session.method('messages.send', {'peer_id': user_id, 'message':all_users_attendance, 'random_id':0})
     if rang_check(user_id) == 0.070:
       group = group_for_startsta_check(user_id)
-      conn = sqlite3.connect('botdatabase.db')
-      cursor = conn.cursor()
-      data = (" SELECT user_id FROM Groups")
-      id_user = cursor.execute(data)
-      id_user = id_user.fetchall()
-      all_users_attendance = ""
+      id_user = all_user_ids()
       for i in range(len(id_user)):
-        id_id = id_user[i]
-        id_id = id_id[0]
-        id_id = int(id_id)
+        id_id = take_int_id(i, id_user)
         if group == group_check(id_id):   
           attendance = attendance_check(id_id)
           if attendance == "":
@@ -593,49 +469,26 @@ def attendance_1(event, user_id, response):
 
 def attendance_1_keyboard_2(event, user_id, response):
   try:
-    if step_check(user_id) == 30:
-      keyboard = {
-        "one_time": True,
-        "buttons": [
-        [get_button(label="Первый курс", color="primary"),
-        get_button(label="Второй курс", color="primary")],
-        [get_button(label="Третий курс", color="primary"),
-        get_button(label="Четвертый курс", color="primary")],
-        [get_button(label="<<< Специальности", color="secondary")]
-        ]
-      }
-      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-      keyboard = str(keyboard.decode('utf-8'))
+    if step_check(user_id) == 30: 
       if response == "программисты":
         update_step(user_id, step=31)
-        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard})
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard_course})
       if response == "разработчики":
           update_step(user_id, step=32)
-          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard})
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard_course})
       if response == "коммерция":
         update_step(user_id, step=33)
-        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard})
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите группу!", 'random_id':0, "keyboard": keyboard_course})
       if response == "безопасники":
         update_step(user_id, step=34)
-        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите курс!", 'random_id':0, "keyboard": keyboard})
+        vk_session.method('messages.send', {'peer_id': user_id, 'message':"Укажите курс!", 'random_id':0, "keyboard": keyboard_course})
   except: pass
 
 def attendance_2(event, user_id, response):
   if response == "ltспециальности":
     if step_check(user_id) == 31 or step_check(user_id) == 32 or step_check(user_id) == 33 or step_check(user_id) == 34:
-      keyboard = {
-        "one_time": True,
-        "buttons": [
-        [get_button(label="Программисты", color="primary")],
-        [get_button(label="Разработчики", color="primary"),
-         get_button(label="Коммерция", color="primary")],
-        [get_button(label="Безопасники", color="primary")]
-        ]
-      }
-      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-      keyboard = str(keyboard.decode('utf-8'))
       update_step(user_id, step=30)
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Пожалуйста выберите специальность", 'random_id':0, "keyboard": keyboard})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Пожалуйста выберите специальность", 'random_id':0, "keyboard": keyboard_profilse})
 
   if response == "первыйкурс":
     if step_check(user_id) == 31:
@@ -731,17 +584,9 @@ def attendance_3_world(event, user_id, response):
       if groupa(response) != "real":
         update_attendance_world(user_id, response)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично !", 'random_id':0})
-        
-        conn = sqlite3.connect('botdatabase.db')
-        cursor = conn.cursor()
-        data = (" SELECT user_id FROM Groups")
-        id_user = cursor.execute(data)
-        id_user = id_user.fetchall()
-
+        id_user = all_user_ids()
         for i in range(len(id_user)):
-          id_id = id_user[i]
-          id_id = id_id[0]
-          id_id = int(id_id)
+          id_id = take_int_id(i, id_user)
           if attendance_check(user_id) == group_check(id_id):
             update_step(id_id, step=37)
             update_attendance_world(id_id, response)
@@ -760,11 +605,11 @@ def attendance_world_check(event, user_id, response):
         update_attendance(user_id, attendance = subject + " " + str(datetime.strftime(datetime.now(), "%H:%M")))
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично вы отметелись !", 'random_id':0})
         update_step(user_id, step = 0)
-        update_attendance_world(user_id, attendance_world = "")
+        update_attendance_world(user_id, "")
     elif response != attendance_check_world(user_id):
       if step_check(user_id) == 37:
         update_step(user_id, step = 0)
-        update_attendance(user_id, attendance_world = "прогул")
+        update_attendance(user_id, "прогул")
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Не верное слово:(", 'random_id':0})
   except: pass
 
@@ -784,18 +629,8 @@ def regestration_for_teacher_step_two(event, user_id, response):
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Буду рад в дальнейшем сотрудничать", 'random_id':0})
 
 def recruitment_team(event, user_id, response):
-  if response == "наборвкоманду": 
-    keyboard = {
-      "one_time": True,
-      "buttons": [
-      [get_button(label="В колледже", color="primary")],
-      [get_button(label="В группе", color="primary"),]
-      ]
-    }
-
-    keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-    keyboard = str(keyboard.decode('utf-8'))
-    vk_session.method('messages.send', {'peer_id': user_id, 'message':"Где вы хотите набрать команду ? \n в колледже/в группе", 'random_id':0, "keyboard": keyboard})
+  if response == "наборвкоманду":   
+    vk_session.method('messages.send', {'peer_id': user_id, 'message':"Где вы хотите набрать команду ? \n в колледже/в группе", 'random_id':0, "keyboard": recruitment_team_keyboard})
     update_step(user_id, step = 50)
 
 def recruitment_team_2(event, user_id, response):
@@ -825,16 +660,9 @@ def recruitment_team_31(event, user_id, response, bulk):
           update_recruitment(user_id, bulk)
           nullify_step(user_id, step=0)
           group = recruitment_group_check(user_id)
-          conn = sqlite3.connect('botdatabase.db')
-          cursor = conn.cursor()
-          data = (" SELECT user_id FROM Groups")
-          id_user = cursor.execute(data)
-          id_user = id_user.fetchall()
-
+          id_user = all_user_ids()
           for i in range(len(id_user)):
-            id_id = id_user[i]
-            id_id = id_id[0]
-            id_id = int(id_id)
+            id_id = take_int_id(i, id_user)
             if group == group_check(id_id):
               if rang_check(id_id) >= 0.050:
                 if recruitment_check(id_id) == "":
@@ -860,15 +688,9 @@ def recruitment_team_31(event, user_id, response, bulk):
 
         if rang_check(user_id) >= 0.050:
           group = recruitment_group_check(user_id)
-          conn = sqlite3.connect('botdatabase.db')
-          cursor = conn.cursor()
-          data = (" SELECT user_id FROM Groups")
-          id_user = cursor.execute(data)
-          id_user = id_user.fetchall()
+          id_user = all_user_ids()
           for i in range(len(id_user)):
-            id_id = id_user[i]
-            id_id = id_id[0]
-            id_id = int(id_id)
+            id_id = take_int_id(i, id_user)
             if group == group_check(id_id):
               vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk, 'random_id':0})
           nullify_step(user_id, step=0)
@@ -885,16 +707,9 @@ def recruitment_team_41_check(event, user_id, response, bulk):
         message_id = recruitment_check(user_id)
         vk_session.method('messages.send', {'peer_id': message_id, 'message':"Ваш запрос одобрен", 'random_id':0})
         group = recruitment_group_check(message_id)
-        conn = sqlite3.connect('botdatabase.db')
-        cursor = conn.cursor()
-        data = (" SELECT user_id FROM Groups")
-        id_user = cursor.execute(data)
-        id_user = id_user.fetchall()
-
+        id_user = all_user_ids()
         for i in range(len(id_user)):
-          id_id = id_user[i]
-          id_id = id_id[0]
-          id_id = int(id_id)
+          id_id = take_int_id(i, id_user)
           if group == group_check(id_id):
             vk_session.method('messages.send', {'peer_id': id_id, 'message':recruitment_check(message_id), 'random_id':0})
         update_recruitment(user_id, "")
@@ -918,16 +733,9 @@ def recruitment_team_32(event, user_id, response, bulk):
       if rang_check(user_id) >= 0.050:
         if response != "вколледже":
           vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично, надеюсь скоро к вам кто нибудь подключиться", 'random_id':0})
-          conn = sqlite3.connect('botdatabase.db')
-          cursor = conn.cursor()
-          data = (" SELECT user_id FROM Groups")
-          id_user = cursor.execute(data)
-          id_user = id_user.fetchall()
-
+          id_user = all_user_ids()
           for i in range(len(id_user)):
-            id_id = id_user[i]
-            id_id = id_id[0]
-            id_id = int(id_id)
+            id_id = take_int_id(i, id_user)
             if id_id != user_id:
               vk_session.method('messages.send', {'peer_id': id_id, 'message':bulk,'random_id':0})
       if rang_check(user_id) < 0.050:
@@ -935,32 +743,15 @@ def recruitment_team_32(event, user_id, response, bulk):
           vk_session.method('messages.send', {'peer_id': user_id, 'message':"Ваш запрос направлен на одобрение", 'random_id':0})
           nullify_step(user_id, step=0)
           group = recruitment_group_check(user_id)
-          conn = sqlite3.connect('botdatabase.db')
-          cursor = conn.cursor()
-          data = (" SELECT user_id FROM Groups")
-          id_user = cursor.execute(data)
-          id_user = id_user.fetchall()
-
+          id_user = all_user_ids()
           for i in range(len(id_user)):
-            id_id = id_user[i]
-            id_id = id_id[0]
-            id_id = int(id_id)
+            id_id = take_int_id(i, id_user)
             if group == group_check(id_id):
               if rang_check(id_id) >= 0.050:
                 update_step(id_id, step=55)
                 update_recruitment(id_id, str(user_id))
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
-                keyboard = {
-                  "one_time": True,
-                  "buttons": [
-                  [get_button(label="Да", color="positive"),
-                  get_button(label="Нет", color="negative")]
-                  ]
-                }
-
-                keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-                keyboard = str(keyboard.decode('utf-8'))
-                vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard})
+                vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard_yes_no})
   except: pass
 
 def recruitment_team_42_check(event, user_id, response, bulk):
@@ -969,16 +760,9 @@ def recruitment_team_42_check(event, user_id, response, bulk):
       if rang_check(user_id) >= 0.050:
         message_id = recruitment_check(user_id)
         vk_session.method('messages.send', {'peer_id': message_id, 'message':"Ваш запрос одобрен", 'random_id':0})
-        conn = sqlite3.connect('botdatabase.db')
-        cursor = conn.cursor()
-        data = (" SELECT user_id FROM Groups")
-        id_user = cursor.execute(data)
-        id_user = id_user.fetchall()
-
+        id_user = all_user_ids()
         for i in range(len(id_user)):
-          id_id = id_user[i]
-          id_id = id_id[0]
-          id_id = int(id_id)
+          id_id = take_int_id(i, id_user)
           vk_session.method('messages.send', {'peer_id': id_id, 'message':recruitment_check(message_id), 'random_id':0})
         nullify_step(user_id, 0)
         update_recruitment(user_id, "")
@@ -1158,17 +942,10 @@ def homework_send_3(event, user_id, response, bulk):
     if step_check(user_id) == 68:
       if groupa(response) != "real":
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Домашнее задание отправленно!", 'random_id':0})
-        conn = sqlite3.connect('botdatabase.db')
-        cursor = conn.cursor()
-        data = (" SELECT user_id FROM Groups")
-        id_user = cursor.execute(data)
-        id_user = id_user.fetchall()
         grupa = homework_check(user_id)
-
+        id_user = all_user_ids()
         for i in range(len(id_user)):
-          id_id = id_user[i]
-          id_id = id_id[0]
-          id_id = int(id_id)
+          id_id = take_int_id(i, id_user)
           if grupa == group_check(id_id):
             day_homework(id_id, bulk, group_check(user_id))
             if chose_homework_check(id_id) == '1':
@@ -1184,18 +961,8 @@ def homework_send_3(event, user_id, response, bulk):
 
 def homework_send_notification(event, user_id, response):
   if response == "уведомление":
-    keyboard = {
-      "one_time": True,
-      "buttons": [
-      [get_button(label="Да", color="positive"),
-       get_button(label="Нет", color="negative")]
-      ]
-    }
-
-    keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-    keyboard = str(keyboard.decode('utf-8'))
     update_step(user_id, step = 70)
-    vk_session.method('messages.send', {'peer_id': user_id, 'message':"Хотите ли вы получать домашнее задание сразу ?", 'random_id':0, "keyboard": keyboard})
+    vk_session.method('messages.send', {'peer_id': user_id, 'message':"Хотите ли вы получать домашнее задание сразу ?", 'random_id':0, "keyboard": keyboard_yes_no})
 
 def homework_send_notification_2(event, user_id, response):
   try: 

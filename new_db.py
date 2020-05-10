@@ -13,6 +13,17 @@ def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attenda
     cursor.close()
     conn.close()
 
+def all_user_ids():
+    conn = sqlite3.connect('botdatabase.db')
+    cursor = conn.cursor()
+    data = (" SELECT user_id FROM Groups")
+    id_user = cursor.execute(data)
+    id_user = id_user.fetchall()
+    
+    conn.commit()
+    conn.close()
+    return id_user    
+
 def group_for_startsta_check(user_id=0):
     connect = sqlite3.connect('botdatabase.db')
     cursor = connect.cursor()

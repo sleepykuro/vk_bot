@@ -4,6 +4,11 @@ import numpy as np
 from datetime import datetime, date, time
 import json
 
+def take_int_id(namber, id_user):
+    id_id = id_user[namber]
+    id_id = id_id[0]
+    id_id = int(id_id)
+    return id_id
 
 groups = {
    "course_1": "1",
@@ -111,8 +116,61 @@ def get_button(label, color, payload=""):
             "color": color
     }
 
+keyboard_yes_no = {
+      "one_time": True,
+      "buttons": [
+      [get_button(label="Да", color="positive"),
+       get_button(label="Нет", color="negative")]
+      ]
+    }
+keyboard_yes_no = json.dumps(keyboard_yes_no, ensure_ascii=False).encode('utf-8')
+keyboard_yes_no = str(keyboard_yes_no.decode('utf-8'))
 
+recruitment_team_keyboard = {
+      "one_time": True,
+      "buttons": [
+      [get_button(label="В колледже", color="primary")],
+      [get_button(label="В группе", color="primary"),]
+      ]
+    }
 
+recruitment_team_keyboard = json.dumps(recruitment_team_keyboard, ensure_ascii=False).encode('utf-8')
+recruitment_team_keyboard = str(recruitment_team_keyboard.decode('utf-8'))
+
+keyboard_profilse = {
+        "one_time": True,
+        "buttons": [
+        [get_button(label="Программисты", color="primary")],
+        [get_button(label="Разработчики", color="primary"),
+         get_button(label="Коммерция", color="primary")],
+        [get_button(label="Безопасники", color="primary")]
+        ]
+      }
+keyboard_profilse = json.dumps(keyboard_profilse, ensure_ascii=False).encode('utf-8')
+keyboard_profilse = str(keyboard_profilse.decode('utf-8'))
+
+keyboard_course = {
+        "one_time": True,
+        "buttons": [
+        [get_button(label="Первый курс", color="primary"),
+        get_button(label="Второй курс", color="primary")],
+        [get_button(label="Третий курс", color="primary"),
+        get_button(label="Четвертый курс", color="primary")],
+        [get_button(label="<<< Специальности", color="secondary")]
+        ]
+      }
+keyboard_course = json.dumps(keyboard_course, ensure_ascii=False).encode('utf-8')
+keyboard_course = str(keyboard_course.decode('utf-8'))
+
+bulk_keyboard = {
+      "one_time": True,
+      "buttons": [
+      [get_button(label="Колледжу", color="primary")],
+      [get_button(label="Группе", color="primary"),]
+      ]
+    }
+bulk_keyboard = json.dumps(bulk_keyboard, ensure_ascii=False).encode('utf-8')
+bulk_keyboard = str(bulk_keyboard.decode('utf-8'))
 
 class Variables:
     where = 'курская'
