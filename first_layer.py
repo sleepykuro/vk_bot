@@ -476,7 +476,7 @@ def attendance_1(event, user_id, response):
           last_name=user_get['last_name']
           full_name=first_name+" "+last_name
           users_attendance = full_name + ": " + users_attendance
-          all_users_attendance = all_users_attendance +"\n" +users_attendance 
+          all_users_attendance = all_users_attendance +"\n" + users_attendance 
       vk_session.method('messages.send', {'peer_id': user_id, 'message': "     Первая пара     " + all_users_attendance, 'random_id':0})
       all_users_attendance = ""
       for i in range(len(id_user)):
@@ -1071,7 +1071,7 @@ def homework_send_notification(event, user_id, response):
   if response == "уведомление":
     update_step(user_id, step = 70)
     vk_session.method('messages.send', {'peer_id': user_id, 'message':"Хотите ли вы получать домашнее задание сразу ?", 'random_id':0, "keyboard": keyboard_yes_no})
-
+  
 def homework_send_notification_2(event, user_id, response):
   try: 
     if response == "да":
