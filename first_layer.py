@@ -10,7 +10,7 @@ import re
 import json
 
 
-tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
+tokenn = open(r"C:\Users\alfas\Desktop\token.txt", "r")
 tokenn = tokenn.read()
 vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
@@ -123,7 +123,7 @@ def regestration_for_starosta_2(event, user_id, response):
 
 def help_user(event,user_id, response):
   try:
-    if response == "help" or response == "помощь" :
+    if help_check(response) == 'help':
       if rang_check(user_id) == 0.010:
         keyboard = {
           "one_time": True,
@@ -261,22 +261,33 @@ def help_user(event,user_id, response):
         \n7. Смена ранга: Изменение ранга пользователя
         \n8. Набор в команду: Рассылка ссылки на беседу группе/колледжу
         """, 'random_id':0, "keyboard": keyboard})     
+
   except:
-    if response == "help" or response == "помощь" :
-      keyboard = {
-        "one_time": True,
-        "buttons": [
-        [get_button(label="Help", color="primary"),
-         get_button(label="Регистрация", color="primary")]
-        ]
-      }
-      keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-      keyboard = str(keyboard.decode('utf-8'))   
-      vk_session.method('messages.send', {'user_id': user_id, 'message':
-      """
-      \n1. Help: Список комманд доступный вашему статусу (Не зарегистрированный пользователь)
-      \n2. Регистрация:  Информация о том как зарегестрировать себя в боте
-      """, 'random_id':0, "keyboard": keyboard})
+        keyboard = {
+          "one_time": True,
+          "buttons": [
+          [get_button(label="Help", color="primary"),
+           get_button(label="Регистрация", color="primary")],
+          [get_button(label="Карта", color="primary"),
+           get_button(label="Поступление", color="primary")],
+          [get_button(label="Специальности", color="primary"),
+           get_button(label="Мастер классы", color="primary")],
+          [get_button(label="ДОД", color="primary")]
+          ]
+        }
+        keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
+        keyboard = str(keyboard.decode('utf-8'))   
+        vk_session.method('messages.send', {'user_id': user_id, 'message':
+        """
+        \n1. Help: Список комманд доступный вашему статусу (Не зарегистрированный пользователь)
+        \n2. Регистрация:  Информация о том как зарегестрировать себя в боте
+        \n3. Карта колледжа: План здания учебного заведения
+        \n4. Поступить в колледж: Форма заявки в колледж
+        \n5. Выбор специальности: тест на профориентацию и обписание профессий 
+        \n6. Мастер классы: Список текущих мастер классов
+        \n7. День открытых дверей: Программа мероприятия
+        """, 'random_id':0, "keyboard": keyboard})
+  
 
 def bulk_message(event, user_id, response):
   if response == "массовоесообщение":    
@@ -1180,7 +1191,39 @@ def rang_update_step_3(event, user_id, response, bulk):
 #                                           Функции для абитуриентов
 #_________________________________________________________________________________________________________________________
 
-def send_links(event, user_id, response):
+  # \n1. Help: Список комманд доступный вашему статусу (Не зарегистрированный пользователь)
+  # \n2. Регистрация:  Информация о том как зарегестрировать себя в боте
+  # \n3. Карта колледжа: План здания учебного заведения
+  # \n4. Поступить в колледж: Форма заявки в колледж
+  # \n5. Выбор специальности: тест на профориентацию и обписание профессий 
+  # \n6. Мастер классы: Список текущих мастер классов
+  # \n7. День открытых дверей: Программа мероприятия
+
+  # ниже код для загрузки фотографии на сервера ВК
+  # pfile = post(api.photos.getMessagesUploadServer(peer_id = update['object']['from_id'])['upload_url'], files = {'photo': open('python.jpeg', 'rb')}).json()
+  # photo = api.photos.saveMessagesPhoto(server = pfile['server'], photo = pfile['photo'], hash = pfile['hash'])[0]
+
+def map_enrollee(event, user_id, response):
   if user_id != check_db(user_id):
-    if response == "нашисоцсети":
-      pass
+    if response == "карта":
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Карта.jpg", 'random_id':0})
+
+def entrance_enrollee(event, user_id, response):
+  if user_id != check_db(user_id):
+    if response == "поступление":
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Тут вы можете заполнить форму для поступления: \n", 'random_id':0})
+
+def specialty_enrollee(event, user_id, response):
+  if user_id != check_db(user_id):
+    if response == "специальности":
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Тест на проффориетацию: \n Список всех профессий с описанием: ", 'random_id':0})
+
+def master_enrollee(event, user_id, response):
+  if user_id != check_db(user_id):
+    if response == "мастерклассы":
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Список текущих мастер классов: ", 'random_id':0})
+
+def dod_enrollee(event, user_id, response):
+  if user_id != check_db(user_id):
+    if response == "дод":
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Программа мероприятия: ", 'random_id':0})

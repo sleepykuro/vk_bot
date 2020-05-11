@@ -102,7 +102,21 @@ while bot_on() != 'off':
             rang_update_step_3(event, user_id, response, bulk)
 
             
-            
+#________________________________________________________________________________________________________________________
+
+#                                           Функции для абитуриентов
+#_________________________________________________________________________________________________________________________
+
+            map_enrollee(event, user_id, response)
+
+            entrance_enrollee(event, user_id, response)
+
+            specialty_enrollee(event, user_id, response)
+
+            master_enrollee(event, user_id, response)
+
+            dod_enrollee(event, user_id, response)
+
             
 
 

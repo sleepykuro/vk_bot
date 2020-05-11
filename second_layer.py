@@ -57,8 +57,15 @@ def hi_answer_random(hi):
             answer = 'Привет'
         return answer
 
+def help_check(resp):
+    a = ["help", "рудз", 
+    "помощь", "gjvjom",
+     "func", "функции"]
+    if resp in a:
+        return 'help'
+
 def hello_check(resp):
-    a = ["привет", 'прив' , 'здраствуй',
+    a = ["привет", 'здраствуй',
     'здраствуйте', 'hi' ,'hello' , 'hey' , 
     'приветствую' ,'здарова' , 'здарово' ,
     'ку' , 'салам' , 'саламсалам' ,'ghbdtn','приветик']
