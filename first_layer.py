@@ -1173,3 +1173,14 @@ def rang_update_step_3(event, user_id, response, bulk):
         nullify_step(user_id, step = 0)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Готово", 'random_id':0})
         
+
+
+#___________________________________________________________________________________________________________________
+
+#                                           Функции для абитуриентов
+#_________________________________________________________________________________________________________________________
+
+def send_links(event, user_id, response):
+  if user_id != check_db(user_id):
+    if response == "нашисоцсети":
+      pass
