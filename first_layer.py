@@ -1206,24 +1206,24 @@ def rang_update_step_3(event, user_id, response, bulk):
 def map_enrollee(event, user_id, response):
   if user_id != check_db(user_id):
     if response == "карта":
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Карта.jpg", 'random_id':0})
+      vk_session.method('messages.send', {'peer_id': user_id, "attachment": "photo187298352_457239017", 'random_id':0})
 
 def entrance_enrollee(event, user_id, response):
   if user_id != check_db(user_id):
     if response == "поступление":
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Тут вы можете заполнить форму для поступления: \n", 'random_id':0})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Тут вы можете заполнить форму для поступления: https://ithub.ru/#joinus0", 'random_id':0})
 
 def specialty_enrollee(event, user_id, response):
   if user_id != check_db(user_id):
     if response == "специальности":
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Тест на проффориетацию: \n Список всех профессий с описанием: ", 'random_id':0})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Тест на проффориетацию:  https://ithub.ru/find-yourself/ \n Список всех профессий с описанием: https://ithub.ru/#specs  ", 'random_id':0})
 
 def master_enrollee(event, user_id, response):
   if user_id != check_db(user_id):
     if response == "мастерклассы":
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Список текущих мастер классов: ", 'random_id':0})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Список текущих мастер классов: https://ithub.ru/courses/?src=ithub", 'random_id':0})
 
 def dod_enrollee(event, user_id, response):
   if user_id != check_db(user_id):
     if response == "дод":
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Программа мероприятия: ", 'random_id':0})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Программа мероприятия: https://ithub.ru/events/ ", 'random_id':0})
