@@ -10,6 +10,17 @@ def take_int_id(namber, id_user):
     id_id = int(id_id)
     return id_id
 
+game = {
+
+"камень✂": "win",
+"ножницы📜": "win",
+"бумага🗿": "win",
+"ножницы🗿": "lose",
+"бумага✂": "lose",
+"камень📜": "lose"
+
+}
+
 groups = {
    "course_1": "1",
    "course_2": "2",
@@ -27,6 +38,12 @@ groups = {
    "year_4": "16"
 
 }
+
+def take_thing(response):
+    if response == "камень": return "🗿"
+    if response == "бумага": return "📜"
+    if response == "ножницы": return "✂"
+     
 
 def hi_answer_random(hi):
     if hi == 'hi':
@@ -168,6 +185,27 @@ keyboard_course = {
       }
 keyboard_course = json.dumps(keyboard_course, ensure_ascii=False).encode('utf-8')
 keyboard_course = str(keyboard_course.decode('utf-8'))
+
+keyboard_game = {
+        "one_time": True,
+        "buttons": [
+        [get_button(label="Камень", color="primary"),
+        get_button(label="Ножницы", color="primary"),
+        get_button(label="Бумага", color="primary")]
+        ]
+      }
+keyboard_game = json.dumps(keyboard_game, ensure_ascii=False).encode('utf-8')
+keyboard_game = str(keyboard_game.decode('utf-8'))
+
+keyboard_replay = {
+        "one_time": True,
+        "buttons": [
+        [get_button(label="Играть еще раз", color="primary"),
+        get_button(label="Help", color="primary")]
+        ]
+      }
+keyboard_replay = json.dumps(keyboard_replay, ensure_ascii=False).encode('utf-8')
+keyboard_replay = str(keyboard_replay.decode('utf-8'))
 
 bulk_keyboard = {
       "one_time": True,

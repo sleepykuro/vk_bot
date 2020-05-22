@@ -37,9 +37,9 @@ while bot_on() != 'off':
 
             group_message_check(event,user_id, response)
 
-            game_1(event,user_id, response)
+            start_game(event,user_id, response)
 
-            game_2(event,user_id, response)
+            end_game(event,user_id, response)
             
             timetable(event,user_id, response)
 
@@ -89,6 +89,8 @@ while bot_on() != 'off':
 
             homework_send_notification_2(event, user_id, response)
 
+            delete_starosta_rang(event, user_id, response)
+
 
 #_________________________________________________________________________________________________________________________
 
@@ -106,8 +108,6 @@ while bot_on() != 'off':
 
 #                                           Функции для абитуриентов
 #_________________________________________________________________________________________________________________________
-
-            map_enrollee(event, user_id, response)
 
             entrance_enrollee(event, user_id, response)
 
