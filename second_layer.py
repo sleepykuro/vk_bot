@@ -301,6 +301,98 @@ keyboard_profilse = {
 keyboard_profilse = json.dumps(keyboard_profilse, ensure_ascii=False).encode('utf-8')
 keyboard_profilse = str(keyboard_profilse.decode('utf-8'))
 
+keyboard_help_student = {
+          "one_time": True,
+          "buttons": [
+          [get_button(label="Help", color="primary"),
+           get_button(label="Массовое сообщение", color="primary")],
+          [get_button(label="Игра", color="primary"),
+           get_button(label="Время", color="primary")],
+          [get_button(label="Домашнее задание", color="primary"),
+           get_button(label="Уведомление", color="primary")],
+          [get_button(label="Набор в команду", color="primary")]
+          ]
+        }
+keyboard_help_student = json.dumps(keyboard_help_student, ensure_ascii=False).encode('utf-8')
+keyboard_help_student = str(keyboard_help_student.decode('utf-8'))
+keyboard_help_kurator = {
+          "one_time": True,
+          "buttons": [
+          [get_button(label="Help", color="primary"),
+           get_button(label="Массовое сообщение", color="primary")],
+          [get_button(label="Игра", color="primary"),
+           get_button(label="Время", color="primary")],
+          [get_button(label="Домашнее задание", color="primary"),
+           get_button(label="Уведомление", color="primary")],
+          [get_button(label="Посещаемость", color="primary"),
+           get_button(label="Набор в команду", color="primary")]
+          ]
+        }
+keyboard_help_kurator = json.dumps(keyboard_help_kurator, ensure_ascii=False).encode('utf-8')
+keyboard_help_kurator = str(keyboard_help_kurator.decode('utf-8'))
+
+keyboard_help_teacher = {
+          "one_time": True,
+          "buttons": [
+          [get_button(label="Help", color="primary"),
+           get_button(label="Массовое сообщение", color="primary")],
+          [get_button(label="Игра", color="primary"),
+           get_button(label="Время", color="primary")],
+          [get_button(label="Домашнее задание", color="primary"),
+           get_button(label="Уведомление", color="primary")],
+          [get_button(label="Посещаемость", color="primary"),
+           get_button(label="Набор в команду", color="primary")]
+          ]
+        }
+keyboard_help_teacher = json.dumps(keyboard_help_teacher, ensure_ascii=False).encode('utf-8')
+keyboard_help_teacher = str(keyboard_help_teacher.decode('utf-8'))
+
+keyboard_help_user = {
+          "one_time": True,
+          "buttons": [
+          [get_button(label="Help", color="primary"),
+           get_button(label="Регистрация", color="primary")],
+          [get_button(label="Поступление", color="primary"),
+           get_button(label="Специальности", color="primary")],
+          [get_button(label="Мастер классы", color="primary"),
+           get_button(label="ДОД", color="primary")]
+          ]
+        }
+keyboard_help_user = json.dumps(keyboard_help_user, ensure_ascii=False).encode('utf-8')
+keyboard_help_user = str(keyboard_help_user.decode('utf-8'))
+
+keyboard_help_administration = {
+          "one_time": True,
+          "buttons": [
+          [get_button(label="Help", color="primary"),
+           get_button(label="Массовое сообщение", color="primary")],
+          [get_button(label="Игра", color="primary"),
+           get_button(label="Время", color="primary")],
+          [get_button(label="Домашнее задание", color="primary"),
+           get_button(label="Уведомление", color="primary")],
+          [get_button(label="Смена ранга", color="primary"),
+           get_button(label="Набор в команду", color="primary")]
+          ]
+        }
+keyboard_help_administration = json.dumps(keyboard_help_administration, ensure_ascii=False).encode('utf-8')
+keyboard_help_administration = str(keyboard_help_administration.decode('utf-8'))
+
+keyboard_help_starosta = {
+          "one_time": True,
+          "buttons": [
+          [get_button(label="Help", color="primary"),
+           get_button(label="Массовое сообщение", color="primary")],
+          [get_button(label="Игра", color="primary"),
+           get_button(label="Время", color="primary")],
+          [get_button(label="Домашнее задание", color="primary"),
+           get_button(label="Уведомление", color="primary")],
+          [get_button(label="Посещаемость", color="primary"),
+           get_button(label="Набор в команду", color="primary")]
+          ]
+        }
+keyboard_help_starosta = json.dumps(keyboard_help_starosta, ensure_ascii=False).encode('utf-8')
+keyboard_help_starosta = str(keyboard_help_starosta.decode('utf-8'))
+
 keyboard_course = {
         "one_time": True,
         "buttons": [

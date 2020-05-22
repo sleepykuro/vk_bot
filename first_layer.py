@@ -10,7 +10,7 @@ import re
 import json
 
 
-tokenn = open(r"C:\Users\alfas\Desktop\token.txt", "r")
+tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
 tokenn = tokenn.read()
 vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
@@ -113,20 +113,6 @@ def help_user(event,user_id, response):
   try:
     if help_check(response) == 'help':
       if rang_check(user_id) == 0.010:
-        keyboard = {
-          "one_time": True,
-          "buttons": [
-          [get_button(label="Help", color="primary"),
-           get_button(label="Массовое сообщение", color="primary")],
-          [get_button(label="Игра", color="primary"),
-           get_button(label="Время", color="primary")],
-          [get_button(label="Домашнее задание", color="primary"),
-           get_button(label="Уведомление", color="primary")],
-          [get_button(label="Набор в команду", color="primary")]
-          ]
-        }
-        keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-        keyboard = str(keyboard.decode('utf-8'))
         vk_session.method('messages.send', {'user_id': user_id, 'message':
         """
         \n1. Help: Список комманд доступный вашему статусу (Студент)
@@ -136,24 +122,8 @@ def help_user(event,user_id, response):
         \n5. Домашнее задание: Просмотр заданного домашнего задания
         \n6. Уведомления: Настройка получения удомлений
         \n7. Набор в команду: Рассылка ссылки на беседу группе/колледжу
-        """, 'random_id':0, "keyboard": keyboard})
-
+        """, 'random_id':0, "keyboard": keyboard_help_student})
       if rang_check(user_id) == 0.050:
-        keyboard = {
-          "one_time": True,
-          "buttons": [
-          [get_button(label="Help", color="primary"),
-           get_button(label="Массовое сообщение", color="primary")],
-          [get_button(label="Игра", color="primary"),
-           get_button(label="Время", color="primary")],
-          [get_button(label="Домашнее задание", color="primary"),
-           get_button(label="Уведомление", color="primary")],
-          [get_button(label="Посещаемость", color="primary"),
-           get_button(label="Набор в команду", color="primary")]
-          ]
-        }
-        keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-        keyboard = str(keyboard.decode('utf-8'))
         vk_session.method('messages.send', {'user_id': user_id, 'message':
         """
         \n1. Help: Список комманд доступный вашему статусу (Староста)
@@ -164,24 +134,8 @@ def help_user(event,user_id, response):
         \n6. Уведомления: Настройка получения удомлений
         \n7. Посещаемость: Просмотр просещаемость своей группы группы
         \n8. Набор в команду: Рассылка ссылки на беседу группе/колледжу
-        """, 'random_id':0, "keyboard": keyboard})
-
+        """, 'random_id':0, "keyboard": keyboard_help_starosta})
       if rang_check(user_id) == 0.070:
-        keyboard = {
-          "one_time": True,
-          "buttons": [
-          [get_button(label="Help", color="primary"),
-           get_button(label="Массовое сообщение", color="primary")],
-          [get_button(label="Игра", color="primary"),
-           get_button(label="Время", color="primary")],
-          [get_button(label="Домашнее задание", color="primary"),
-           get_button(label="Уведомление", color="primary")],
-          [get_button(label="Посещаемость", color="primary"),
-           get_button(label="Набор в команду", color="primary")]
-          ]
-        }
-        keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-        keyboard = str(keyboard.decode('utf-8'))
         vk_session.method('messages.send', {'user_id': user_id, 'message':
         """
         \n1. Help: Список комманд доступный вашему статусу (Куратор)
@@ -192,24 +146,8 @@ def help_user(event,user_id, response):
         \n6. Уведомления: Настройка получения удомлений
         \n7. Посещаемость: Просмотр просещаемость курируемой группы
         \n8. Набор в команду: Рассылка ссылки на беседу группе/колледжу
-        """, 'random_id':0, "keyboard": keyboard})
-
+        """, 'random_id':0, "keyboard": keyboard_help_kurator})
       if rang_check(user_id) == 1:
-        keyboard = {
-          "one_time": True,
-          "buttons": [
-          [get_button(label="Help", color="primary"),
-           get_button(label="Массовое сообщение", color="primary")],
-          [get_button(label="Игра", color="primary"),
-           get_button(label="Время", color="primary")],
-          [get_button(label="Домашнее задание", color="primary"),
-           get_button(label="Уведомление", color="primary")],
-          [get_button(label="Посещаемость", color="primary"),
-           get_button(label="Набор в команду", color="primary")]
-          ]
-        }
-        keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-        keyboard = str(keyboard.decode('utf-8'))
         vk_session.method('messages.send', {'user_id': user_id, 'message':
         """
         \n1. Help: Список комманд доступный вашему статусу (Преподаватель)
@@ -220,24 +158,8 @@ def help_user(event,user_id, response):
         \n6. Уведомления: Настройка получения удомлений
         \n7. Посещаемость: Проверка посещаемости
         \n8. Набор в команду: Рассылка ссылки на беседу группе/колледжу
-        """, 'random_id':0, "keyboard": keyboard})
-
+        """, 'random_id':0, "keyboard": keyboard_help_teacher})
       if rang_check(user_id) == 0.100:
-        keyboard = {
-          "one_time": True,
-          "buttons": [
-          [get_button(label="Help", color="primary"),
-           get_button(label="Массовое сообщение", color="primary")],
-          [get_button(label="Игра", color="primary"),
-           get_button(label="Время", color="primary")],
-          [get_button(label="Домашнее задание", color="primary"),
-           get_button(label="Уведомление", color="primary")],
-          [get_button(label="Смена ранга", color="primary"),
-           get_button(label="Набор в команду", color="primary")]
-          ]
-        }
-        keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-        keyboard = str(keyboard.decode('utf-8'))
         vk_session.method('messages.send', {'user_id': user_id, 'message':
         """
         \n1. Help: Список комманд доступный вашему статусу (Администратор)
@@ -248,22 +170,8 @@ def help_user(event,user_id, response):
         \n6. Уведомления: Настройка получения удомлений
         \n7. Смена ранга: Изменение ранга пользователя
         \n8. Набор в команду: Рассылка ссылки на беседу группе/колледжу
-        """, 'random_id':0, "keyboard": keyboard})     
-
-  except:
-        keyboard = {
-          "one_time": True,
-          "buttons": [
-          [get_button(label="Help", color="primary"),
-           get_button(label="Регистрация", color="primary")],
-          [get_button(label="Поступление", color="primary"),
-           get_button(label="Специальности", color="primary")],
-          [get_button(label="Мастер классы", color="primary"),
-           get_button(label="ДОД", color="primary")]
-          ]
-        }
-        keyboard = json.dumps(keyboard, ensure_ascii=False).encode('utf-8')
-        keyboard = str(keyboard.decode('utf-8'))   
+        """, 'random_id':0, "keyboard": keyboard_help_administration})     
+  except:   
         vk_session.method('messages.send', {'user_id': user_id, 'message':
         """
         \n1. Help: Список комманд доступный вашему статусу (Не зарегистрированный пользователь)
@@ -273,7 +181,7 @@ def help_user(event,user_id, response):
         \n5. Выбор специальности: тест на профориентацию и обписание профессий 
         \n6. Мастер классы: Список текущих мастер классов
         \n7. День открытых дверей: Программа мероприятия
-        """, 'random_id':0, "keyboard": keyboard})
+        """, 'random_id':0, "keyboard": keyboard_help_user})
   
 def bulk_message(event, user_id, response, bulk):
   if user_id == check_db(user_id):
