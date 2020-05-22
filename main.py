@@ -13,34 +13,18 @@ while bot_on() != 'off':
 
             regestration_info(event,user_id, response) 
 
-            regestration_one(event,user_id, response) 
-            
-            regestration_two(event,user_id, response)
+            regestration(event,user_id, response) 
 
             regestration_for_kurator(event, user_id, response)
 
-            regestration_for_kurator_2(event, user_id, response)
-
             regestration_for_starosta(event, user_id, response) 
-
-            regestration_for_starosta_2(event, user_id, response)
-            
+    
             help_user(event,user_id, response) 
 
-            bulk_message(event, user_id, response)
-
-            bulk_message_take(event, user_id, response)
-            
-            bulk_group_message(event,user_id, response, bulk)
-
-            bulk_message_check(event,user_id, response)
-
-            group_message_check(event,user_id, response)
+            bulk_message(event, user_id, response, bulk)
 
             start_game(event,user_id, response)
 
-            end_game(event,user_id, response)
-            
             timetable(event,user_id, response)
 
             attendance_1(event, user_id, response)
@@ -61,19 +45,7 @@ while bot_on() != 'off':
 
             regestration_for_teacher_step_two(event, user_id, response)
 
-            recruitment_team(event, user_id, response)
-
-            recruitment_team_2(event, user_id, response)
-
-            recruitment_team_21(event, user_id, response)
-
-            recruitment_team_31(event, user_id, response, bulk)
-
-            recruitment_team_41_check(event, user_id, response, bulk)
-
-            recruitment_team_32(event, user_id, response, bulk)
-
-            recruitment_team_42_check(event, user_id, response, bulk)
+            recruitment_team(event, user_id, response, bulk)
 
             homework_send(event, user_id, response)
 
