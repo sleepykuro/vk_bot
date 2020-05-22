@@ -10,7 +10,7 @@ import re
 import json
 
 
-tokenn = open(r"C:\Users\egor\Desktop\token.txt", "r")
+tokenn = open(r"C:\Users\alfas\Desktop\token.txt", "r")
 tokenn = tokenn.read()
 vk_session = vk_api.VkApi(token=tokenn)
 session_api = vk_session.get_api()
@@ -57,7 +57,7 @@ def hello(event,user_id, response):
 
 def regestration_info(event,user_id, response):
   if registration_check(response) == "какзарегистрироваться":
-    vk_session.method('messages.send', {'user_id': user_id, 'message':'Что бы зарегестрироваться: \n 1.Напишите номер вашей группы \n 2.Напишите ваш статус в колледже (доступен только "ученик")', 'random_id':0}) 
+    vk_session.method('messages.send', {'user_id': user_id, 'message':'Что бы зарегестрироваться: \n Напишите номер вашей группы', 'random_id':0}) 
 
 def regestration(event, user_id, response):
   if user_id != check_db(user_id):
@@ -286,8 +286,7 @@ def bulk_message(event, user_id, response, bulk):
       update_step(user_id, 11)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какое сообщение отправить?", 'random_id':0})
     try:
-      if response != "колледжу" and response != "группе" and response != "сообщение":
-        if step_check(user_id) == 10:
+      if response != "колледжу" and response != "группе" and response != "сообщение" and step_check(user_id) == 10:
           if rang_check(user_id) >= 0.070:
             vk_session.method('messages.send', {'peer_id': user_id, 'message':"Сообщние отправленно!", 'random_id':0})
             nullify_step(user_id, 0)
@@ -317,8 +316,7 @@ def bulk_message(event, user_id, response, bulk):
                     nullify_step(user_id, 0)
                     vk_session.method('messages.send', {'peer_id': user_id, 'message':"сообщение другого пользователя пока не одобренно, попробуйте позже", 'random_id':0})
                     break
-      if response != "колледжу" and response != "группе" and response != "сообщение":
-        if step_check(user_id) == 11:
+      if response != "колледжу" and response != "группе" and response != "сообщение" and step_check(user_id) == 11:
           if rang_check(user_id) == 0.070:
             id_user = all_user_ids()
             for i in range(len(id_user)):
@@ -338,20 +336,19 @@ def bulk_message(event, user_id, response, bulk):
                   if rang_check(id_id) >= 0.050 and rang_check(id_id) < 0.070:
                     if bulk_check_id(id_id) == "":
                       nullify_step(user_id, 0)
-                      vk_session.method('messages.send', {'user_id': user_id, 'message':"Ваше сообение направленно на одобрение старосте", 'random_id':0})
+                      vk_session.method('messages.send', {'user_id': user_id, 'message':"Ваше сообщение направленно на одобрение старосте", 'random_id':0})
                       update_step(id_id, step=12)
                       update_bulk(id_id, str(user_id))
                       vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
                       vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard_yes_no})
                     elif bulk_check_id(id_id) != "":
                       nullify_step(user_id, 0)
-                      vk_session.method('messages.send', {'peer_id': user_id, 'message':"сообщение другого пользователя пока не одобренно, попробуйте позже", 'random_id':0})                   
+                      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Сообщение другого пользователя пока не одобренно, попробуйте позже", 'random_id':0})                   
     except: pass
     try:
-      if response == "да" or response == "одобряю": 
-        if step_check(user_id) == 12:
+      if response == "да" or response == "одобряю" and step_check(user_id) == 12:
           message_id = bulk_check_id(user_id)
-          vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
+          vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобрена!", 'random_id':0})
           bulk = bulk_check(message_id)
           id_user = all_user_ids()
           for i in range(len(id_user)):
@@ -361,8 +358,7 @@ def bulk_message(event, user_id, response, bulk):
           nullify_step(user_id, step = 0)
           update_bulk(user_id, "")
           update_bulk(message_id, "")
-      elif response == "нет" or response == "неодобряю": 
-        if step_check(user_id) == 12:
+      elif response == "нет" or response == "неодобряю" and step_check(user_id) == 12: 
           message_id = int(bulk_check(user_id))
           vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения отклонена", 'random_id':0})
           nullify_step(user_id, step = 0)
@@ -370,10 +366,9 @@ def bulk_message(event, user_id, response, bulk):
           update_bulk(message_id, "")
     except: pass
     try:
-      if response == "да" or response == "одобряю": 
-        if step_check(user_id) == 13:
+      if response == "да" or response == "одобряю" and step_check(user_id) == 13:
           message_id = bulk_check_id(user_id)
-          vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобренна!", 'random_id':0})
+          vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения одобрена!", 'random_id':0})
           bulk = bulk_check(message_id)
           group = group_check(user_id)
           id_user = all_user_ids()
@@ -384,8 +379,7 @@ def bulk_message(event, user_id, response, bulk):
           nullify_step(user_id, step = 0)
           update_bulk(user_id, "")
           update_bulk(message_id, "")
-      elif response == "нет" or "неодобряю": 
-        if step_check(user_id) == 13:
+      elif response == "нет" or "неодобряю" and step_check(user_id) == 13:
           message_id = int(bulk_check(user_id))
           vk_session.method('messages.send', {'peer_id': message_id, 'message':"Отправка вашего сообщения отклонена", 'random_id':0})
           nullify_step(user_id, step = 0)
@@ -717,8 +711,7 @@ def regestration_for_teacher(event, user_id, response):
       else: vk_session.method('messages.send', {'peer_id': user_id, 'message':"вы уже зарегестрированны", 'random_id':0})
 
 def regestration_for_teacher_step_two(event, user_id, response):
-  if "real" == subject_check(response):
-    if step_check(user_id) == 40:
+  if "real" == subject_check(response) and step_check(user_id) == 40:
       nullify_step(user_id, step = 0)
       update_group(user_id, response)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Буду рад в дальнейшем сотрудничать", 'random_id':0})
@@ -731,88 +724,68 @@ def recruitment_team(event, user_id, response, bulk):
     if response == "вгруппе" and step_check(user_id) == 50:
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Хорошо, в таком случае укажите следующие данные: \n\n 1. Номер группы\n2. Сообщение и ссылку на беседу", 'random_id':0, "keyboard": keyboard_profilse})
       update_step(user_id, step = 505)
-    if response == "программисты":
-      if step_check(user_id) == 505:
+    if response == "программисты" and step_check(user_id) == 505:
         update_step(user_id, step=501)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Введите курс", 'random_id':0, "keyboard": keyboard_course})
-    if response == "разработчики":
-      if step_check(user_id) == 505:
+    if response == "разработчики" and step_check(user_id) == 505:
         update_step(user_id, step=502)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Введите курс", 'random_id':0, "keyboard": keyboard_course})
-    if response == "коммерция":
-      if step_check(user_id) == 505:
+    if response == "коммерция" and step_check(user_id) == 505:
         update_step(user_id, step=503)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Введите курс", 'random_id':0, "keyboard": keyboard_course})
-    if response == "безопасники":
-      if step_check(user_id) == 505:
+    if response == "безопасники" and step_check(user_id) == 505:
         update_step(user_id, step=504)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Введите курс", 'random_id':0, "keyboard": keyboard_course})
     if response == "ltспециальности":
       if step_check(user_id) == 501 or step_check(user_id) == 502 or step_check(user_id) == 503 or step_check(user_id) == 504:
         update_step(user_id, step=505)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Пожалуйста выберите специальность", 'random_id':0, "keyboard": keyboard_profilse})
-    if response == "первыйкурс":
-      if step_check(user_id) == 501:
+    if response == "первыйкурс" and step_check(user_id) == 501:
         course_letter = groups["course_1"] + groups["letter_1"]
         year = groups["year_1"]
-    if response == "первыйкурс":
-      if step_check(user_id) == 502:
+    if response == "первыйкурс" and step_check(user_id) == 502:
         course_letter = groups["course_1"] + groups["letter_2"]
         year = groups["year_1"]
-    if response == "первыйкурс":
-      if step_check(user_id) == 503:
+    if response == "первыйкурс" and step_check(user_id) == 503:
         course_letter = groups["course_1"] + groups["letter_3"]
         year = groups["year_1"]
-    if response == "первыйкурс":
-      if step_check(user_id) == 504:
+    if response == "первыйкурс" and step_check(user_id) == 504:
         course_letter = groups["course_1"] + groups["letter_4"]
         year = groups["year_1"]
-    if response == "второйкурс":
-      if step_check(user_id) == 501:
+    if response == "второйкурс" and step_check(user_id) == 501:
         course_letter = groups["course_2"] + groups["letter_1"]
         year = groups["year_2"]
-    if response == "второйкурс":
-      if step_check(user_id) == 502:
+    if response == "второйкурс" and step_check(user_id) == 502:
         course_letter = groups["course_2"] + groups["letter_2"]
         year = groups["year_2"]
-    if response == "второйкурс":
-      if step_check(user_id) == 503:
+    if response == "второйкурс" and step_check(user_id) == 503:
         course_letter = groups["course_2"] + groups["letter_3"]
         year = groups["year_2"]
-    if response == "второйкурс":
-      if step_check(user_id) == 504:
+    if response == "второйкурс" and step_check(user_id) == 504:
         course_letter = groups["course_2"] + groups["letter_4"]
         year = groups["year_2"]
-    if response == "третийкурс":
-      if step_check(user_id) == 501:
+    if response == "третийкурс" and step_check(user_id) == 501:
         course_letter = groups["course_3"] + groups["letter_1"]
         year = groups["year_3"]
-    if response == "третийкурс":
-      if step_check(user_id) == 502:
+    if response == "третийкурс" and step_check(user_id) == 502:
         course_letter = groups["course_3"] + groups["letter_2"]
         year = groups["year_3"]
-    if response == "третийкурс":
-      if step_check(user_id) == 503:
+    if response == "третийкурс" and step_check(user_id) == 503:
         course_letter = groups["course_3"] + groups["letter_3"]
         year = groups["year_3"]
-    if response == "третийкурс":
-      if step_check(user_id) == 504:
+    if response == "третийкурс" and step_check(user_id) == 504:
         course_letter = groups["course_3"] + groups["letter_4"]
         year = groups["year_3"]
-    if response == "четвертыйкурс":
-      if step_check(user_id) == 501:
+    if response == "четвертыйкурс" and step_check(user_id) == 501:
         course_letter = groups["course_4"] + groups["letter_1"]
         year = groups["year_4"]
-    if response == "четвертыйкурс":
-      if step_check(user_id) == 502:
+    if response == "четвертыйкурс" and step_check(user_id) == 502:
         course_letter = groups["course_4"] + groups["letter_1"]
         year = groups["year_4"]
-    if response == "четвертыйкурс":
-      if step_check(user_id) == 503:
+    if response == "четвертыйкурс" and step_check(user_id) == 503:
         course_letter = groups["course_4"] + groups["letter_1"]
         year = groups["year_4"]
-    if response == "четвертыйкурс":
-      if step_check(user_id) == 504: 
+    if response == "четвертыйкурс" and step_check(user_id) == 504:
         course_letter = groups["course_4"] + groups["letter_1"]
         year = groups["year_4"]   
     try:
@@ -829,20 +802,17 @@ def recruitment_team(event, user_id, response, bulk):
       update_step(user_id, step=51)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какая группа?", 'random_id':0, "keyboard": keyboard})
     except: pass
-    if response == "вколледже":
-      if step_check(user_id) == 50:
+    if response == "вколледже" and step_check(user_id) == 50:
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"хорошо, в таком случае напишите сообщение которое нужно отправить вместе с ссылкой на беседу", 'random_id':0})
         update_step(user_id, step = 52)
     try: 
-      if step_check(user_id) == 51:
-        if groupa(response) == "real":
+      if groupa(response) == "real" and step_check(user_id) == 51:
           update_recruitment_group(user_id, response)
           update_step(user_id, step = 53)
           vk_session.method('messages.send', {'peer_id': user_id, 'message':"Теперь укажите сообщение с ссылкой на беседу", 'random_id':0})
     except: pass
     try:
-      if step_check(user_id) == 53:
-        if groupa(response) != "real":
+      if groupa(response) != "real" and step_check(user_id) == 53:
           if rang_check(user_id) < 0.050:
             update_recruitment(user_id, bulk)
             nullify_step(user_id, step=0)
@@ -883,10 +853,9 @@ def recruitment_team(event, user_id, response, bulk):
             nullify_step(user_id, step=0)
             update_recruitment_group(user_id, "")
             update_recruitment(user_id, "")
-            vk_session.method('messages.send', {'peer_id': user_id, 'message':"надеюсь в скором времени к вам подключаться люди!(или нет)", 'random_id':0})
+            vk_session.method('messages.send', {'peer_id': user_id, 'message':"Надеюсь в скором времени к вам подключаться люди!(или нет)", 'random_id':0})
     except: pass
-    if response == "да": 
-      if step_check(user_id) == 54:
+    if response == "да" and step_check(user_id) == 54:
         if rang_check(user_id) >= 0.050:
           nullify_step(user_id, 0)
           message_id = recruitment_check(user_id)
@@ -901,8 +870,7 @@ def recruitment_team(event, user_id, response, bulk):
           nullify_step(message_id, 0)
           update_recruitment(message_id, "")
           update_recruitment_group(message_id, "")
-    if response == "нет": 
-      if step_check(user_id) == 54:
+    if response == "нет" and step_check(user_id) == 54:
         if rang_check(user_id) >= 0.050:
           message_id = recruitment_check(user_id)
           vk_session.method('messages.send', {'peer_id': message_id, 'message':"Ваш запрос откланен", 'random_id':0})
@@ -934,10 +902,9 @@ def recruitment_team(event, user_id, response, bulk):
                 update_recruitment(id_id, str(user_id))
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Сообщение на одобрение: {bulk}", 'random_id':0})
                 vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n\n Одобрить сообщение ? ", 'random_id':0, "keyboard": keyboard_yes_no})
-          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Ваш запрос направлен на одобрение!!!!!!!!!", 'random_id':0})
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Ваш запрос направлен на одобрение!", 'random_id':0})
     except: pass
-    if response == "да": 
-      if step_check(user_id) == 55:
+    if response == "да" and step_check(user_id) == 55:
         if rang_check(user_id) >= 0.050:
           message_id = recruitment_check(user_id)
           vk_session.method('messages.send', {'peer_id': message_id, 'message':"Ваш запрос одобрен", 'random_id':0})
@@ -950,8 +917,7 @@ def recruitment_team(event, user_id, response, bulk):
           nullify_step(message_id, 0)
           update_recruitment(message_id, "")
           update_recruitment_group(message_id, "")
-    if response == "нет": 
-      if step_check(user_id) == 55:
+    if response == "нет" and step_check(user_id) == 55:
         if rang_check(user_id) >= 0.050:
           message_id = recruitment_check(user_id)
           vk_session.method('messages.send', {'peer_id': message_id, 'message':"Ваш запрос отклонен", 'random_id':0})
@@ -968,13 +934,13 @@ def homework_send(event, user_id, response):
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Пожалуйста выберите специальность", 'random_id':0, "keyboard": keyboard_profilse})
       elif rang_check(user_id) < 1:
         if homework_check == "":
-          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Домашки пока нет", 'random_id':0})
+          vk_session.method('messages.send', {'peer_id': user_id, 'message':"Домашнего задания пока нет", 'random_id':0})
         elif homework_check != "":
           try: 
             homework = homework_check(user_id)
             vk_session.method('messages.send', {'peer_id': user_id, 'message':f"{homework}", 'random_id':0})
           except:
-            vk_session.method('messages.send', {'peer_id': user_id, 'message':"Домашки пока нет", 'random_id':0})
+            vk_session.method('messages.send', {'peer_id': user_id, 'message':"Домашнего задания пока нет", 'random_id':0})
 
 def homework_send_1(event, user_id, response):
   try: 
@@ -1010,68 +976,52 @@ def homework_send_1_2(event, user_id, response):
       update_step(user_id, step=62)
       vk_session.method('messages.send', {'peer_id': user_id, 'message':"Пожалуйста выберите специальность", 'random_id':0, "keyboard": keyboard})
 
-  if response == "первыйкурс":
-    if step_check(user_id) == 63:
+  if response == "первыйкурс" and step_check(user_id) == 63:
       course_letter = groups["course_1"] + groups["letter_1"]
       year = groups["year_1"]
-  if response == "первыйкурс":
-    if step_check(user_id) == 64:
+  if response == "первыйкурс" and step_check(user_id) == 64:
       course_letter = groups["course_1"] + groups["letter_2"]
       year = groups["year_1"]
-  if response == "первыйкурс":
-    if step_check(user_id) == 65:
+  if response == "первыйкурс" and step_check(user_id) == 65:
       course_letter = groups["course_1"] + groups["letter_3"]
       year = groups["year_1"]
-  if response == "первыйкурс":
-    if step_check(user_id) == 66:
+  if response == "первыйкурс" and step_check(user_id) == 66:
       course_letter = groups["course_1"] + groups["letter_4"]
       year = groups["year_1"]
-  if response == "второйкурс":
-    if step_check(user_id) == 63:
+  if response == "второйкурс" and step_check(user_id) == 63:
       course_letter = groups["course_2"] + groups["letter_1"]
       year = groups["year_2"]
-  if response == "второйкурс":
-    if step_check(user_id) == 64:
+  if response == "второйкурс" and step_check(user_id) == 64:
       course_letter = groups["course_2"] + groups["letter_2"]
       year = groups["year_2"]
-  if response == "второйкурс":
-    if step_check(user_id) == 65:
+  if response == "второйкурс" and step_check(user_id) == 65:
       course_letter = groups["course_2"] + groups["letter_3"]
       year = groups["year_2"]
-  if response == "второйкурс":
-    if step_check(user_id) == 66:
+  if response == "второйкурс" and step_check(user_id) == 66:
       course_letter = groups["course_2"] + groups["letter_4"]
       year = groups["year_2"]
-  if response == "третийкурс":
-    if step_check(user_id) == 63:
+  if response == "третийкурс" and step_check(user_id) == 63:
       course_letter = groups["course_3"] + groups["letter_1"]
       year = groups["year_3"]
-  if response == "третийкурс":
-    if step_check(user_id) == 64:
+  if response == "третийкурс" and step_check(user_id) == 64:
       course_letter = groups["course_3"] + groups["letter_2"]
       year = groups["year_3"]
-  if response == "третийкурс":
-    if step_check(user_id) == 65:
+  if response == "третийкурс" and step_check(user_id) == 65:
       course_letter = groups["course_3"] + groups["letter_3"]
       year = groups["year_3"]
-  if response == "третийкурс":
-    if step_check(user_id) == 66:
+  if response == "третийкурс" and step_check(user_id) == 66:
       course_letter = groups["course_3"] + groups["letter_4"]
       year = groups["year_3"]
-  if response == "четвертыйкурс":
-    if step_check(user_id) == 63:
+  if response == "четвертыйкурс" and step_check(user_id) == 63:
       course_letter = groups["course_4"] + groups["letter_1"]
       year = groups["year_4"]
-  if response == "четвертыйкурс":
-    if step_check(user_id) == 64:
+  if response == "четвертыйкурс" and step_check(user_id) == 64:
       course_letter = groups["course_4"] + groups["letter_1"]
       year = groups["year_4"]
-  if response == "четвертыйкурс":
-    if step_check(user_id) == 65:
+  if response == "четвертыйкурс" and step_check(user_id) == 65:
       course_letter = groups["course_4"] + groups["letter_1"]
       year = groups["year_4"]
-  if response == "четвертыйкурс":
-    if step_check(user_id) == 66: 
+  if response == "четвертыйкурс" and step_check(user_id) == 66:
       course_letter = groups["course_4"] + groups["letter_1"]
       year = groups["year_4"]   
   try:
@@ -1094,7 +1044,7 @@ def homework_send_2(event, user_id, response):
     if step_check(user_id) == 67:
       update_homework(user_id, response)
       update_step(user_id, 68)
-      vk_session.method('messages.send', {'peer_id': user_id, 'message':"какое будет домашнее задание?", 'random_id':0})
+      vk_session.method('messages.send', {'peer_id': user_id, 'message':"Какое будет домашнее задание?", 'random_id':0})
       
 def homework_send_3(event, user_id, response, bulk): 
   try:
@@ -1108,9 +1058,9 @@ def homework_send_3(event, user_id, response, bulk):
           if grupa == group_check(id_id):
             day_homework(id_id, bulk, group_check(user_id))
             if chose_homework_check(id_id) == '1':
-              vk_session.method('messages.send', {'peer_id': id_id, 'message':f"домашнее задание по предмету {group_check(user_id)} \n {bulk}", 'random_id':0})
+              vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Домашнее задание по предмету {group_check(user_id)} \n {bulk}", 'random_id':0})
             if chose_homework_check(id_id) == "":
-              vk_session.method('messages.send', {'peer_id': id_id, 'message':f"домашнее задание по предмету {group_check(user_id)} \n {bulk}", 'random_id':0})
+              vk_session.method('messages.send', {'peer_id': id_id, 'message':f"Домашнее задание по предмету {group_check(user_id)} \n {bulk}", 'random_id':0})
               vk_session.method('messages.send', {'peer_id': id_id, 'message':"\n Если хотите настроить отравку вам уведомлений то напишите - уведомления", 'random_id':0})
 
 
@@ -1126,13 +1076,11 @@ def homework_send_notification(event, user_id, response):
     
 def homework_send_notification_2(event, user_id, response):
   try: 
-    if response == "да":
-      if step_check(user_id) == 70:
+    if response == "да" and step_check(user_id) == 70:
         update_chose_homework(user_id, 1)
         nullify_step(user_id, 0)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Отлично! Теперь буду прислать вам домашнее задание ", 'random_id':0})
-    if response == "нет":
-      if step_check(user_id) == 70:
+    if response == "нет" and step_check(user_id) == 70:
         update_chose_homework(user_id, 0)
         nullify_step(user_id, 0)
         vk_session.method('messages.send', {'peer_id': user_id, 'message':"Хорошо, не буду беспокоить", 'random_id':0})   
@@ -1147,8 +1095,8 @@ def delete_starosta_rang(event, user_id, response):
         if group_for_startsta_check(user_id) == group_check(id_id):
           if rang_check(id_id) == 0.050:
             update_rang(id_id, 0.010)
-            vk_session.method('messages.send', {'peer_id': id_id, 'message':"ТЫ БОЛЬШЕ НЕ СТАРОСТА!", 'random_id':0})
-            vk_session.method('messages.send', {'peer_id': user_id, 'message':"Назначте новго старасту! пока не поздно ", 'random_id':0})  
+            vk_session.method('messages.send', {'peer_id': id_id, 'message':"Ты больше не староста!", 'random_id':0})
+            vk_session.method('messages.send', {'peer_id': user_id, 'message':"Назначьте нового старосту!", 'random_id':0})  
           
 def delete_homework():
     if datetime.strftime(datetime.now(), "%H:%M") == '12:39':
