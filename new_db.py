@@ -1,6 +1,6 @@
 import sqlite3
 
-def database(user_id = 0, user_group='', step = 1, rang = '', bulk = '', attendance = "", attendance_world = "", recruitment_group = "", recruitment = "", homework = "", chose_homework = "", group_for_startsta = "", lessons1 = "", lessons2 = "", lessons3 = "", lessons4 = "", lessons5 = ""):
+def database(user_id = 0, user_group='', step = 1, rang = '0.010', bulk = '', attendance = "", attendance_world = "", recruitment_group = "", recruitment = "", homework = "", chose_homework = "", group_for_startsta = "", lessons1 = "", lessons2 = "", lessons3 = "", lessons4 = "", lessons5 = ""):
     
     data = [user_id, user_group, step, rang, bulk, attendance, attendance_world, recruitment_group, recruitment, homework, chose_homework, group_for_startsta]
     

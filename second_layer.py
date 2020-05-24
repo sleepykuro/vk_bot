@@ -361,6 +361,15 @@ keyboard_help_user = {
 keyboard_help_user = json.dumps(keyboard_help_user, ensure_ascii=False).encode('utf-8')
 keyboard_help_user = str(keyboard_help_user.decode('utf-8'))
 
+keyboard_student = {
+          "one_time": True,
+          "buttons": [
+          [get_button(label="студент", color="primary")]
+          ]
+        }
+keyboard_student = json.dumps(keyboard_student, ensure_ascii=False).encode('utf-8')
+keyboard_student = str(keyboard_student.decode('utf-8'))
+
 keyboard_help_administration = {
           "one_time": True,
           "buttons": [
@@ -451,6 +460,17 @@ keyboard_lessons = {
 keyboard_lessons = json.dumps(keyboard_lessons, ensure_ascii=False).encode('utf-8')
 keyboard_lessons = str(keyboard_lessons.decode('utf-8'))
 
+keyboard_clean_hw = {
+      "one_time": True,
+      "buttons": [
+      [get_button(label="отчистить", color="primary"),
+      get_button(label="help", color="primary")]
+      ]
+    }
+
+keyboard_clean_hw = json.dumps(keyboard_clean_hw, ensure_ascii=False).encode('utf-8')
+keyboard_clean_hw = str(keyboard_clean_hw.decode('utf-8'))
+
 keyboard_help = {
     "one_time": True,
     "buttons": [
@@ -487,11 +507,11 @@ groups = {
    "letter_1": "п",
    "letter_2": "р",
    "letter_3": "к",
-   "letter_4": "иб",
+   "letter_4": "п",
 
    "year_1": "19",
    "year_2": "18",
    "year_3": "17",
-   "year_4": "16"
+   "year_4": "17"
 
 }

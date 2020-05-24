@@ -9,11 +9,15 @@ while bot_on() != 'off':
         user_message(event,user_id, response)
         if event.from_user and not (event.from_me):
             
+            start(event, user_id, response)
+            
             hello(event,user_id, response)
 
             regestration_info(event,user_id, response) 
 
             regestration(event,user_id, response) 
+
+            regestration_2(event, user_id, response)                                
 
             regestration_for_kurator(event, user_id, response)
 
@@ -46,6 +50,8 @@ while bot_on() != 'off':
             regestration_for_teacher_step_two(event, user_id, response)
 
             recruitment_team(event, user_id, response, bulk)
+
+            clean_homework(event, user_id, response)
 
             homework_send(event, user_id, response)
 
