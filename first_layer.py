@@ -56,8 +56,7 @@ def start(event, user_id, response):
 
 def hello(event,user_id, response):
   if hello_check(response) == 'привет':
-    hi_answer = hi_answer_random('hi')
-    vk_session.method('messages.send', {'user_id': user_id, 'message':hi_answer, 'random_id':0, "keyboard": keyboard_help})
+    vk_session.method('messages.send', {'user_id': user_id, 'message':"Привет, я личной бот ITHUB колледжа. Я нужен для того, что бы облегчить тебе жизнь в колледже. Напиши “help”, что бы узнать список доступных тебе функий.", 'random_id':0, "keyboard": keyboard_help})
 
 def regestration_info(event,user_id, response):
   if registration_check(response) == "какзарегистрироваться":
@@ -172,11 +171,10 @@ def help_user(event,user_id, response):
         """
         \n1. Help: Список комманд доступный вашему статусу (Не зарегистрированный пользователь)
         \n2. Регистрация:  Информация о том как зарегестрировать себя в боте
-        \n3. Карта колледжа: План здания учебного заведения
-        \n4. Поступить в колледж: Форма заявки в колледж
-        \n5. Выбор специальности: тест на профориентацию и обписание профессий 
-        \n6. Мастер классы: Список текущих мастер классов
-        \n7. День открытых дверей: Программа мероприятия
+        \n3. Поступить в колледж: Форма заявки в колледж
+        \n4. Выбор специальности: тест на профориентацию и обписание профессий 
+        \n5. Мастер классы: Список текущих мастер классов
+        \n6. День открытых дверей: Программа мероприятия
         """, 'random_id':0, "keyboard": keyboard_help_user})
   
 def bulk_message(event, user_id, response, bulk):
